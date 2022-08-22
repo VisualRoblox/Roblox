@@ -1088,7 +1088,8 @@ function Library:GetConfigs()
     end
 end 
 
-function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFolder, Theme)
+function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePerformance, ConfigFolder, Theme)
+    local ImprovePerformance = ImprovePerformance or false
     local HasCustom = false
     local HubName = HubName or 'UI Name'
     local GameName = GameName or 'Game Name'
@@ -1438,31 +1439,33 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
     
     TabButtonHolder.ChildAdded:Connect(UpdateTabButtonHolderSize)
 
-    task.spawn(function()
-        while task.wait() do
-            if ChangeTheme then
-                if not BreakAllLoops then
-                    Utility:Tween(Container.Main, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                    Utility:Tween(Container.Main.PromptHolder, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                    Utility:Tween(Container.Main.Filler1, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                    Utility:Tween(Container.Main.Filler2, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.NamesBehind, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.Filler3, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.HubNameText, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.HubNameText, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.GameNameText, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.GameNameText, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.SidebarLine1, {BackgroundColor3 = Theme.UIStrokeColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.SidebarLine2, {BackgroundColor3 = Theme.UIStrokeColor}, 0.25)
-                    Utility:Tween(Container.Main.Sidebar.TabButtonHolder, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    Utility:Tween(Container.Main.TabContainer, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                else 
-                    break
+    if not ImprovePerformance then
+        task.spawn(function()
+            while task.wait() do
+                if ChangeTheme then
+                    if not BreakAllLoops then
+                        Utility:Tween(Container.Main, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                        Utility:Tween(Container.Main.PromptHolder, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                        Utility:Tween(Container.Main.Filler1, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                        Utility:Tween(Container.Main.Filler2, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.NamesBehind, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.Filler3, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.HubNameText, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.HubNameText, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.GameNameText, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.GameNameText, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.SidebarLine1, {BackgroundColor3 = Theme.UIStrokeColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.SidebarLine2, {BackgroundColor3 = Theme.UIStrokeColor}, 0.25)
+                        Utility:Tween(Container.Main.Sidebar.TabButtonHolder, {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                        Utility:Tween(Container.Main.TabContainer, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                    else 
+                        break
+                    end
                 end
             end
-        end
-    end)
+        end)
+    end
 
     function ChangeThemeValue()
         task.spawn(function()
@@ -1473,8 +1476,161 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
     end
 
     function Library:ChangeTheme(NewTheme)
-        if type(NewTheme) == 'table' then
-            Theme = NewTheme
+        if not ImprovePerformance then
+            if type(NewTheme) == 'table' then
+                Theme = NewTheme
+                local NewTable = {}
+                for Index, Value in next, Theme do
+                    NewTable[Index] = Utility:SplitColor(Value)
+                end
+                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                ChangeThemeValue()
+            elseif type(NewTheme) == 'string' then
+                NewTheme = NewTheme:lower()
+                if NewTheme == 'custom' then
+                    Theme = Themes['Custom']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'default' then
+                    Theme = Themes['Default']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'lighter' then
+                    Theme = Themes['Lighter']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'light' then
+                    Theme = Themes['Light']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'light+' then
+                    Theme = Themes['Light+']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'discord' then
+                    Theme = Themes['Discord']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'red and black' then
+                    Theme = Themes['Red And Black']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'nordic dark' then
+                    Theme = Themes['Nordic Dark']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'nordic light' then
+                    Theme = Themes['Nordic Light']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'purple' then
+                    Theme = Themes['Purple']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'sentinel' then
+                    Theme = Themes['Sentinel']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'synapse x' then
+                    Theme = Themes['Synapse X']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'krnl' then
+                    Theme = Themes['Krnl']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'script-ware' then
+                    Theme = Themes['Script-Ware']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                elseif NewTheme == 'kiriot' then
+                    Theme = Themes['Kiriot']
+                    local NewTable = {}
+                    for Index, Value in next, Theme do
+                        NewTable[Index] = Utility:SplitColor(Value)
+                    end
+                    writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
+                    Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
+                    ChangeThemeValue()
+                end
+            end
+        end
+    end
+
+    function Library:ChangeColor(Index, Color)
+        if not ImprovePerformance then
+            Theme[Index] = Color
             local NewTable = {}
             for Index, Value in next, Theme do
                 NewTable[Index] = Utility:SplitColor(Value)
@@ -1482,156 +1638,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
             writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
             Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
             ChangeThemeValue()
-        elseif type(NewTheme) == 'string' then
-            NewTheme = NewTheme:lower()
-            if NewTheme == 'custom' then
-                Theme = Themes['Custom']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'default' then
-                Theme = Themes['Default']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'lighter' then
-                Theme = Themes['Lighter']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'light' then
-                Theme = Themes['Light']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'light+' then
-                Theme = Themes['Light+']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'discord' then
-                Theme = Themes['Discord']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'red and black' then
-                Theme = Themes['Red And Black']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'nordic dark' then
-                Theme = Themes['Nordic Dark']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'nordic light' then
-                Theme = Themes['Nordic Light']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'purple' then
-                Theme = Themes['Purple']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'sentinel' then
-                Theme = Themes['Sentinel']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'synapse x' then
-                Theme = Themes['Synapse X']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'krnl' then
-                Theme = Themes['Krnl']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'script-ware' then
-                Theme = Themes['Script-Ware']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            elseif NewTheme == 'kiriot' then
-                Theme = Themes['Kiriot']
-                local NewTable = {}
-                for Index, Value in next, Theme do
-                    NewTable[Index] = Utility:SplitColor(Value)
-                end
-                writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-                Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-                ChangeThemeValue()
-            end
         end
-    end
-
-    function Library:ChangeColor(Index, Color)
-        Theme[Index] = Color
-        local NewTable = {}
-        for Index, Value in next, Theme do
-            NewTable[Index] = Utility:SplitColor(Value)
-        end
-        writefile('VisualUILibraryCurrentTheme.json', HttpService:JSONEncode(NewTable))
-        Config['Theme_4z3s4QrUhfqt703FmiAe'] = HttpService:JSONEncode(NewTable)
-        ChangeThemeValue()
     end
 
     function Library:ReturnTheme()
@@ -1726,29 +1733,31 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
         local TabButton = TabButtonHolder[TabName..'ButtonFrame'][TabName..'Button']
         local TabListLayout = Tab[TabName..'ListLayout']
 
-        task.spawn(function()
-            while task.wait() do
-                if ChangeTheme then
-                    if not BreakAllLoops then
-                        if Tab.Visible then
-                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
+        if not ImprovePerformance then
+            task.spawn(function()
+                while task.wait() do
+                    if ChangeTheme then
+                        if not BreakAllLoops then
+                            if Tab.Visible then
+                                Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
+                            else
+                                Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
+                            end
+                            Utility:Tween(Tab, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                            Utility:Tween(Tab, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
+                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                            Utility:Tween(TabButton, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
+                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
                         else
-                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                            Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
+                            break
                         end
-                        Utility:Tween(Tab, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                        Utility:Tween(Tab, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
-                        Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                        Utility:Tween(TabButton, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                        Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonImage'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                        Utility:Tween(TabButtonHolder[TabName..'ButtonFrame'][TabName..'ButtonText'], {BackgroundColor3 = Theme.SidebarColor}, 0.25)
-                    else
-                        break
                     end
                 end
-            end
-        end)
+            end)
+        end
         
         if DefaultVisibility then
             TabButton.Parent[TabName..'ButtonText'].TextColor3 = Theme.PrimaryTextColor
@@ -1828,19 +1837,21 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
             local Section = Tab[Name..'Section']
 
-            task.spawn(function()
-                while task.wait() do
-                    if ChangeTheme then
-                        if not BreakAllLoops then
-                            Utility:Tween(Section, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                            Utility:Tween(Section[Name..'SectionLabel'], {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
-                            Utility:Tween(Section[Name..'SectionLabel'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                        else
-                            break
+            if not ImprovePerformance then
+                task.spawn(function()
+                    while task.wait() do
+                        if ChangeTheme then
+                            if not BreakAllLoops then
+                                Utility:Tween(Section, {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                                Utility:Tween(Section[Name..'SectionLabel'], {BackgroundColor3 = Theme.BackgroundColor}, 0.25)
+                                Utility:Tween(Section[Name..'SectionLabel'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                            else
+                                break
+                            end
                         end
                     end
-                end
-            end)
+                end)
+            end
             
             function UpdateSectionSize()
                 local ContentSize = Section[Name..'ListLayout'].AbsoluteContentSize
@@ -1911,20 +1922,22 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 UpdateSectionSize()
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                Utility:Tween(Section[LabelText..'LabelHolder'], {BackgroundColor3 = Theme.OtherElementColor}, 0.25)
-                                Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'LabelStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'Label'], {BackgroundColor3 = Theme.OtherElementColor}, 0.25)
-                                Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'Label'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                            else
-                                break
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    Utility:Tween(Section[LabelText..'LabelHolder'], {BackgroundColor3 = Theme.OtherElementColor}, 0.25)
+                                    Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'LabelStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'Label'], {BackgroundColor3 = Theme.OtherElementColor}, 0.25)
+                                    Utility:Tween(Section[LabelText..'LabelHolder'][LabelText..'Label'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                else
+                                    break
+                                end
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 function LabelFunctions:UpdateLabel(NewText)
                     Section[LabelText..'LabelHolder'][LabelText..'Label'].Text = NewText
@@ -2006,22 +2019,24 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 UpdateSectionSize()
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                Utility:Tween(ParagraphHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ParagraphHolder[Title..'ParagraphStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(ParagraphTitle, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ParagraphTitle, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(ParagraphContent, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ParagraphContent, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                            else
-                                break
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    Utility:Tween(ParagraphHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ParagraphHolder[Title..'ParagraphStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(ParagraphTitle, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ParagraphTitle, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(ParagraphContent, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ParagraphContent, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                else
+                                    break
+                                end
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 function ParagraphFunctions:UpdateParagraph(NewTitle, NewParagraph)
                     Old = ParagraphContent.Text
@@ -2110,24 +2125,26 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local ButtonHolder = Section[Name..'ButtonHolder']
                 local Button = ButtonHolder[Name..'Button']
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(ButtonHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(ButtonHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(ButtonHolder[Name..'ButtonHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(Button, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(Button, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(Button['ButtonImage'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(Button['ButtonImage'], {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(ButtonHolder[Name..'ButtonHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(Button, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(Button, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(Button['ButtonImage'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(Button['ButtonImage'], {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 Button.MouseButton1Down:Connect(function()
                     Hovering = true
@@ -2263,26 +2280,28 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 Config[Name] = CurrentValue
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(SliderHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(SliderHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(SliderHolder[Name..'SliderHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(SliderHolder['SliderText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(SliderHolder['SliderText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(SliderButton, {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
+                                    Utility:Tween(SliderButton[Name..'SliderButtonStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(SliderNumber, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(SliderNumber, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(SliderHolder[Name..'SliderHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(SliderHolder['SliderText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(SliderHolder['SliderText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(SliderButton, {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
-                                Utility:Tween(SliderButton[Name..'SliderButtonStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(SliderNumber, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(SliderNumber, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 if DefaultValue ~= nil then
                     SliderNumber.Text = tostring(DefaultValue and math.floor((DefaultValue / MaximumValue) * (MaximumValue - MinimumValue) + MinimumValue))
@@ -2414,26 +2433,28 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 UpdateSectionSize()
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(TextboxHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(TextboxHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(TextboxHolder[Name..'TextboxHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(TextboxHolder[Name..'TextboxText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(TextboxHolder[Name..'TextboxText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(Textbox, {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
+                                    Utility:Tween(Textbox, {PlaceholderColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(Textbox, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(Textbox[Name..'TextboxStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(TextboxHolder[Name..'TextboxHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(TextboxHolder[Name..'TextboxText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(TextboxHolder[Name..'TextboxText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(Textbox, {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
-                                Utility:Tween(Textbox, {PlaceholderColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(Textbox, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(Textbox[Name..'TextboxStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 local TextSize = TextService:GetTextSize(Placeholder, 14, Enum.Font.Gotham, Vector2.new(410, 40))
 
@@ -2567,25 +2588,27 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 Config[Name] = Current
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(KeybindHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(KeybindHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(KeybindHolder[Name..'KeybindHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(KeybindHolder[Name..'KeybindText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(KeybindHolder[Name..'KeybindText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(KeybindHolder[Name..'Keybind'], {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
+                                    Utility:Tween(KeybindHolder[Name..'Keybind'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(KeybindHolder[Name..'Keybind'][Name..'KeybindStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(KeybindHolder[Name..'KeybindHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(KeybindHolder[Name..'KeybindText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(KeybindHolder[Name..'KeybindText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(KeybindHolder[Name..'Keybind'], {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
-                                Utility:Tween(KeybindHolder[Name..'Keybind'], {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(KeybindHolder[Name..'Keybind'][Name..'KeybindStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 TextSize = TextService:GetTextSize(Current, 14, Enum.Font.Gotham, Vector2.new(410, 40))
                 if TextSize.X < 25 then
@@ -2747,41 +2770,45 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 Config[Name] = Toggled
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(ToggleHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                end
-                                Utility:Tween(ToggleHolder[Name..'ToggleHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(ToggleHolder[Name..'ToggleText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ToggleHolder[Name..'ToggleText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(ToggleHolder[Name..'Toggle'][Name..'ToggleCircle'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ToggleHolder[Name..'Toggle'][Name..'ToggleStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(ToggleHolder[Name..'ToggleButton'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                            else
-                                break
-                            end
-                        end
-                    end
-                end)
-
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if Toggled == true then
-                                    Utility:Tween(Toggle, {BackgroundColor3 = ToggleColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(ToggleHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(ToggleHolder[Name..'ToggleHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(ToggleHolder[Name..'ToggleText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ToggleHolder[Name..'ToggleText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(ToggleHolder[Name..'Toggle'][Name..'ToggleCircle'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ToggleHolder[Name..'Toggle'][Name..'ToggleStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(ToggleHolder[Name..'ToggleButton'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
                                 else
-                                    Utility:Tween(ToggleHolder[Name..'Toggle'], {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
+                                    break
                                 end
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
+
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if Toggled == true then
+                                        Utility:Tween(Toggle, {BackgroundColor3 = ToggleColor}, 0.25)
+                                    else
+                                        Utility:Tween(ToggleHolder[Name..'Toggle'], {BackgroundColor3 = Theme.SecondaryElementColor}, 0.25)
+                                    end
+                                else
+                                    break
+                                end
+                            end
+                        end
+                    end)
+                end
 
                 if Default then
                     task.spawn(function()                    
@@ -2981,30 +3008,32 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 Config[Name] = Default
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(DropdownHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(DropdownHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(DropdownHolder[Name..'DropdownHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(DropdownHolder[Name..'DropdownText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(DropdownHolder[Name..'DropdownText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(DropdownIcon, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(DropdownIcon, {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(DropdownSelectedText, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(DropdownSelectedText, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(DropList, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(DropList, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
+                                    Utility:Tween(DropList[Name..'DropListStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(DropdownButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(DropdownHolder[Name..'DropdownHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(DropdownHolder[Name..'DropdownText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(DropdownHolder[Name..'DropdownText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(DropdownIcon, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(DropdownIcon, {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(DropdownSelectedText, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(DropdownSelectedText, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(DropList, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(DropList, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
-                                Utility:Tween(DropList[Name..'DropListStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(DropdownButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 DropdownButton.MouseButton1Click:Connect(function()
                     task.wait(0.25)
@@ -3078,20 +3107,22 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                     local OptionButton = DropList[Item..'OptionButton']
 
-                    task.spawn(function()
-                        while task.wait() do
-                            if ChangeTheme then
-                                if not BreakAllLoops then
-                                    if not Hovering then
-                                        Utility:Tween(OptionButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                    if not ImprovePerformance then
+                        task.spawn(function()
+                            while task.wait() do
+                                if ChangeTheme then
+                                    if not BreakAllLoops then
+                                        if not Hovering then
+                                            Utility:Tween(OptionButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                        end
+                                        Utility:Tween(OptionButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    else
+                                        break
                                     end
-                                    Utility:Tween(OptionButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                else
-                                    break
                                 end
                             end
-                        end
-                    end)
+                        end)
+                    end
 
                     OptionButton.MouseEnter:Connect(function()
                         Hovering = true
@@ -3232,20 +3263,22 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
     
                         local OptionButton = DropList[Item..'OptionButton']
 
-                        task.spawn(function()
-                            while task.wait() do
-                                if ChangeTheme then
-                                    if not BreakAllLoops then
-                                        if not Hovering then
-                                            Utility:Tween(OptionButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                        if not ImprovePerformance then
+                            task.spawn(function()
+                                while task.wait() do
+                                    if ChangeTheme then
+                                        if not BreakAllLoops then
+                                            if not Hovering then
+                                                Utility:Tween(OptionButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                            end
+                                            Utility:Tween(OptionButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                        else
+                                            break
                                         end
-                                        Utility:Tween(OptionButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                    else
-                                        break
                                     end
                                 end
-                            end
-                        end)
+                            end)
+                        end
 
                         OptionButton.MouseEnter:Connect(function()
                             Hovering = true
@@ -3467,30 +3500,32 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                     Config[Name] = Utility:SplitColor(DefaultColor)
                 end
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(ColorpickerHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(ColorpickerHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(ColorpickerHolder[Name..'ColorpickerHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(ColorpickerHolder[Name..'ColorpickerText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ColorpickerHolder[Name..'ColorpickerText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(ColorpickerButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ColorpickerButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(ColorpickerDropdown, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ColorpickerDropdown[Name..'ColorpickerDropdownStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(RGBPicker, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(RGBPicker[Name..'RGBPickerStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(DarknessPicker, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(DarknessPicker[Name..'DarknessPickerStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(ColorpickerHolder[Name..'ColorpickerHolderStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(ColorpickerHolder[Name..'ColorpickerText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ColorpickerHolder[Name..'ColorpickerText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(ColorpickerButton, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ColorpickerButton, {TextColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(ColorpickerDropdown, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ColorpickerDropdown[Name..'ColorpickerDropdownStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(RGBPicker, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(RGBPicker[Name..'RGBPickerStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(DarknessPicker, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(DarknessPicker[Name..'DarknessPickerStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 if DefaultColor ~= nil then
                     Color = {H, S, V}
@@ -3770,29 +3805,31 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
 
                 UpdateSectionSize()
 
-                task.spawn(function()
-                    while task.wait() do
-                        if ChangeTheme then
-                            if not BreakAllLoops then
-                                if not Hovering then
-                                    Utility:Tween(ImageHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                if not ImprovePerformance then
+                    task.spawn(function()
+                        while task.wait() do
+                            if ChangeTheme then
+                                if not BreakAllLoops then
+                                    if not Hovering then
+                                        Utility:Tween(ImageHolder, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    end
+                                    Utility:Tween(ImageHolder[Name..'ImageStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(ImageHolder[Name..'ImageText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ImageHolder[Name..'ImageText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+                                    Utility:Tween(ImageIcon, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ImageIcon, {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
+                                    Utility:Tween(ImageDropdown, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(ImageDropdown, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
+                                    Utility:Tween(ImageDropdown[Name..'ImageDropdownStroke'], {Color = Theme.UIStrokeColor}, 0.25)
+                                    Utility:Tween(Image, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                    Utility:Tween(Button, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
+                                else
+                                    break
                                 end
-                                Utility:Tween(ImageHolder[Name..'ImageStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(ImageHolder[Name..'ImageText'], {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ImageHolder[Name..'ImageText'], {TextColor3 = Theme.PrimaryTextColor}, 0.25)
-                                Utility:Tween(ImageIcon, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ImageIcon, {ImageColor3 = Theme.SecondaryTextColor}, 0.25)
-                                Utility:Tween(ImageDropdown, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(ImageDropdown, {ScrollBarImageColor3 = Theme.ScrollBarColor}, 0.25)
-                                Utility:Tween(ImageDropdown[Name..'ImageDropdownStroke'], {Color = Theme.UIStrokeColor}, 0.25)
-                                Utility:Tween(Image, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                                Utility:Tween(Button, {BackgroundColor3 = Theme.PrimaryElementColor}, 0.25)
-                            else
-                                break
                             end
                         end
-                    end
-                end)
+                    end)
+                end
 
                 local function UpdateImageCanvas()
                     local ContentSize = ImageDropdownListLayout.AbsoluteContentSize
