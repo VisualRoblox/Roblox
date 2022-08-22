@@ -1657,6 +1657,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
             Name = TabName,
             Parent = Container.Main.TabContainer.TabsFolder,
             Active = true,
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
             BackgroundColor3 = Theme.BackgroundColor,
             BackgroundTransparency = 1,
             Size = UDim2.new(0, 428, 0, 365),
@@ -1748,20 +1749,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 end
             end
         end)
-
-        function UpdateTabSize()
-            for _, Item in next, Tab:GetDescendants() do
-                if Item:IsA('UIListLayout') and Item.Parent.Parent == Tab then
-                    Utility:Tween(Tab, {CanvasSize = UDim2.new(0, 410, 0, 999999999)}, 0.25)
-                end
-            end
-        end
-
-        UpdateTabButtonHolderSize()
-        UpdateTabSize()
-
-        Tab.ChildAdded:Connect(UpdateTabSize)
-        Tab.ChildRemoved:Connect(UpdateTabSize)
         
         if DefaultVisibility then
             TabButton.Parent[TabName..'ButtonText'].TextColor3 = Theme.PrimaryTextColor
@@ -1780,8 +1767,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
         end
 
         TabButton.MouseButton1Down:Connect(function()
-            UpdateTabSize()
-
             for _, ITab in next, TabFolder:GetChildren() do
                 ITab.Visible = false
             end
@@ -1861,7 +1846,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local ContentSize = Section[Name..'ListLayout'].AbsoluteContentSize
 
                 Utility:Tween(Section, {Size = UDim2.new(0, ContentSize.X, 0, ContentSize.Y)}, 0.25)
-                UpdateTabSize()
             end
 
             for _, Item in next, Section:GetChildren() do
@@ -1869,7 +1853,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                     if Item:IsA('Frame') then
                         Item.Changed:Connect(function(Property)
                             if Property == 'Size' then
-                                UpdateTabSize()
                                 UpdateSectionSize()
                             end
                         end)
@@ -1878,7 +1861,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
             end
 
             UpdateSectionSize()
-            UpdateTabSize()
             Section.ChildAdded:Connect(UpdateSectionSize)
             Section.ChildRemoved:Connect(UpdateSectionSize)
 
@@ -1927,7 +1909,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                     })
                 })
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 task.spawn(function()
@@ -2023,7 +2004,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local ParagraphContent = Section[Title..'ParagraphHolder'][Title..'ParagraphContent']
                 local ParagraphTitle = Section[Title..'ParagraphHolder'][Title..'ParagraphTitle']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 task.spawn(function()
@@ -2125,7 +2105,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                     })
                 })
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 local ButtonHolder = Section[Name..'ButtonHolder']
@@ -2280,7 +2259,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local SliderNumber = SliderHolder[Name..'SliderNumberText']
                 local SliderTrail = SliderButton[Name..'SliderTrail']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 Config[Name] = CurrentValue
@@ -2434,7 +2412,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local TextboxHolder = Section[Name..'TextboxHolder']
                 local Textbox = TextboxHolder[Name..'Textbox']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 task.spawn(function()
@@ -2586,7 +2563,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local KeybindHolder = Section[Name..'KeybindHolder']
                 local Keybind = KeybindHolder[Name..'Keybind']
                 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 Config[Name] = Current
@@ -2767,7 +2743,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local Toggle = ToggleHolder[Name..'Toggle']
                 local Circle = Toggle[Name..'ToggleCircle']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 Config[Name] = Toggled
@@ -3002,7 +2977,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local DropListLayout = DropList[Name..'DropListLayout']
                 local DropdownFiller = Section[Name..'DropdownFiller']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 Config[Name] = Default
@@ -3250,7 +3224,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                         })
 
                         UpdateSectionSize()
-                        UpdateTabSize()
 
                         if #List == 0 then
                             DropdownSelectedText.Text = 'None'
@@ -3488,7 +3461,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local ColorpickerPreview = ColorpickerHolder[Name..'ColorpickerPreview']
                 local ColorpickerFiller = Section[Name..'ColorpickerFiller']
                 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 if not Args[1] == true then
@@ -3538,7 +3510,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                             Utility:Tween(Tab, {CanvasSize = Tab.CanvasSize - UDim2.new(0, 0, 0, 114)}, 0.25)
                             Utility:Tween(Section, {Size = Section.Size - UDim2.new(0, 0, 0, 114)}, 0.25)
                             UpdateSectionSize()
-                            UpdateTabSize()
                             Debounce = true
                             task.wait(DebounceAmount)
                             Debounce = false
@@ -3555,7 +3526,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                             Utility:Tween(DarknessPicker, {Size = UDim2.new(0, 25, 0, 100)}, 0.25)
                             Utility:Tween(ColorpickerFiller, {Size = UDim2.new(0, 410, 0, 110)}, 0.25)
                             UpdateSectionSize()
-                            UpdateTabSize()
                             Debounce = true
                             task.wait(DebounceAmount)
                             Debounce = false
@@ -3798,7 +3768,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                 local ImageFiller = Section[Name..'ImageFiller']
                 local ImageDropdownListLayout = ImageDropdown[Name..'ImageDropdownListLayout']
 
-                UpdateTabSize()
                 UpdateSectionSize()
 
                 task.spawn(function()
@@ -3845,7 +3814,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                             Utility:Tween(Image, {Size = UDim2.new(0, 410, 0, 0)}, 0.25)
                             UpdateImageCanvas()
                             UpdateSectionSize()
-                            UpdateTabSize()
                             Debounce = true
                             task.wait(DebounceAmount)
                             Debounce = false
@@ -3862,7 +3830,6 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ConfigFol
                             Utility:Tween(Image, {Size = ImageSize}, 0.25)
                             UpdateImageCanvas()
                             UpdateSectionSize()
-                            UpdateTabSize()
                             Utility:Tween(ImageIcon, {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
                             Debounce = true
                             task.wait(DebounceAmount)
