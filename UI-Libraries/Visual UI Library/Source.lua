@@ -1992,7 +1992,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                         Name = Title..'ParagraphContent',
                         BackgroundColor3 = Theme.PrimaryElementColor,
                         BackgroundTransparency = 1,
-                        Position = UDim2.new(0, 0, 0, 16),
+                        Position = UDim2.new(0, 0, 0, 20),
                         Size = UDim2.new(0, 410, 0, 20),
                         Font = Enum.Font.Gotham,
                         Text = Paragraph,
@@ -2016,6 +2016,11 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                 local ParagraphHolder = Section[Title..'ParagraphHolder']
                 local ParagraphContent = Section[Title..'ParagraphHolder'][Title..'ParagraphContent']
                 local ParagraphTitle = Section[Title..'ParagraphHolder'][Title..'ParagraphTitle']
+
+                local TextSizeOld = TextService:GetTextSize(Paragraph, 14, Enum.Font.Gotham, Vector2.new(410, math.huge))
+
+                ParagraphHolder.Size = UDim2.new(0, 410, 0, TextSizeOld.Y + 25)
+                ParagraphContent.Size = UDim2.new(0, 410, 0, TextSizeOld.Y)
 
                 UpdateSectionSize()
 
