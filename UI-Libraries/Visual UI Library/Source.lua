@@ -2362,6 +2362,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                     Callback(Value)
                 end
                 ConfigUpdates[Name] = SliderFunctions
+                return SliderFunctions
             end
 
             function Elements:CreateTextbox(Name, Placeholder, Callback)
@@ -2671,6 +2672,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                     Keybind.Text = Value
                 end
                 ConfigUpdates[Name] = KeybindFunctions
+                return KeybindFunctions
             end
 
             function Elements:CreateToggle(Name, Default, ToggleColor, DebounceAmount, Callback)
@@ -2866,6 +2868,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                     end
                 end
                 ConfigUpdates[Name] = ToggleFunctions
+                return ToggleFunctions
             end
 
             function Elements:CreateDropdown(Name, List, Default, DebounceAmount, Callback)
@@ -3679,6 +3682,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                     Callback(Color)
                 end
                 ConfigUpdates[Name] = ColorpickerFunctions
+                return ColorpickerFunctions
             end
 
             function Elements:CreateImage(Name, URL, ImageSize)
