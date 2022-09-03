@@ -6,6 +6,7 @@ local UserInputService = game:GetService('UserInputService')
 local Create = Import('UI/Functions/Create.lua')
 local Tween = Import('UI/Functions/Tween.lua')
 local DestroyUI = Import('UI/Functions/DestroyUI.lua')
+local EnableDragging = Import('UI/Functions/Dragging.lua')
 local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
 -- // Variables
@@ -93,8 +94,14 @@ function UIHandler.LoadUI()
     
     -- // Variables
     local Base = Container['Base']
+    local Topbar = Base['Topbar']
 
+    -- // Enable Dragging
+    EnableDragging(Topbar)
+        
     LoggingHandler.Log('Finished Loading UI')
 end
+
+UIHandler.LoadUI()
 
 return UIHandler
