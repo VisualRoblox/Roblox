@@ -18,7 +18,7 @@ function DestroyUIHandler.DestroyUI()
         Tween(UI.Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
         task.wait(0.25)
 
-        UI:Destroy()
+        UI.Base:Destroy()
 
         LoggingHandler.Log('UI Destroyed')
     end
