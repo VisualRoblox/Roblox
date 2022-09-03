@@ -33,8 +33,7 @@ local Methods = {
 }
 local Visual = {
     Loaded = true,
-    Name = 'x'
-    --Name = HttpService:GenerateGUID()
+    Name = HttpService:GenerateGUID()
 }
 
 -- // Check Exploit Compatibility

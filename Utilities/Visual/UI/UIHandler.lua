@@ -21,8 +21,7 @@ function UIHandler.LoadUI()
     -- // Create Instances
     local Container = Create('ScreenGui', {
         Parent = CoreGui,
-        --Name = Visual.Name
-        Name = 'x'
+        Name = Visual.Name
     }, {
         Create('Frame', {
             Name = 'Base',
