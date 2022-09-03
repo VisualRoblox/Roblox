@@ -30,7 +30,7 @@ local Methods = {
 }
 local Visual = {
     Loaded = true,
-    Name = game:GetService('HttpService'):GenerateGUID()
+    Name = 'VisualAnalyser'
 }
 
 -- // Check Exploit Compatibility
@@ -60,10 +60,6 @@ function Environment.Import(URL)
 
     return table.unpack(Imported)
 end
-
--- // Destroy Old UI
-local DestroyUI = Import('UI/Functions/DestroyUI.lua')
-DestroyUI()
 
 -- // Add Settings Table To Environment
 Environment.Visual = Visual

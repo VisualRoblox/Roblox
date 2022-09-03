@@ -10,25 +10,23 @@ local DestroyUIHandler = {}
 function DestroyUIHandler.DestroyUI()
     LoggingHandler.Log('Destroy UI Called')
 
-    if Visual then
-        if CoreGui:FindFirstChild(Visual.Name) then
-            local UI = CoreGui:FindFirstChild(Name)
+    if CoreGui:FindFirstChild('VisualAnalyser') then
+        local UI = CoreGui:FindFirstChild('VisualAnalyser')
 
-            for _, Item in next, UI.Base:GetChildren() do
-                if Item.Name ~= 'BaseCorner' and Item.Name ~= 'BaseStroke' then
-                    Item:Destroy()
-                end
+        for _, Item in next, UI.Base:GetChildren() do
+            if Item.Name ~= 'BaseCorner' and Item.Name ~= 'BaseStroke' then
+                Item:Destroy()
             end
-
-            Tween(UI.Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
-            task.wait(0.25)
-
-            UI.Base:Destroy()
-            LoggingHandler.Log('UI Destroyed')
-
-            Visual.Loaded = false 
-            LoggingHandler.Log('Unloaded Visual Analyser')
         end
+
+        Tween(UI.Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
+        task.wait(0.25)
+
+        UI.Base:Destroy()
+        LoggingHandler.Log('UI Destroyed')
+
+        Visual.Loaded = false 
+        LoggingHandler.Log('Unloaded Visual Analyser')
     end
 end
 
