@@ -94,6 +94,4 @@ function UIHandler.LoadUI()
     LoggingHandler.Log('Finished Loading UI')
 end
 
-UIHandler.LoadUI()
-
 return UIHandler
