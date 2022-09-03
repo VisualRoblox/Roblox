@@ -42,7 +42,7 @@ if CheckedAmount < MethodsAmount then
 end
 
 -- // Environment
-local Environment = getgenv
+local Environment = getgenv()
 
 -- // Functions
 function Environment.Import(URL)

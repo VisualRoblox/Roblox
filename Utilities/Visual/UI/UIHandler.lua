@@ -2,4 +2,11 @@
 local CoreGui = game:GetService('CoreGui')
 local UserInputService = game:GetService('UserInputService')
 
-print('Loaded UI')
+-- // Variables
+local UIHandler = {}
+
+function UIHandler.Loaded()
+    print('Loaded UI')
+end
+
+return UIHandler
