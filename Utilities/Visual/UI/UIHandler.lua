@@ -15,6 +15,9 @@ function UIHandler.LoadUI()
     -- // Destroy Old UI
     DestroyUI()
 
+    -- // Loaded
+    Visual.Loaded = true
+
     -- // Initilise UI
     LoggingHandler.Log('Initialising UI...')
 
