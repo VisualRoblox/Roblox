@@ -11,8 +11,8 @@ local UIHandler = {}
 
 function UIHandler.LoadUI()
     Create('ScreenGui', {
-        Parent = CoreGui
-        Name = Visual.Name
+        Parent = CoreGui,
+        Name = 'x'
     }, {
         Create('Frame', {
             Name = 'Base'
