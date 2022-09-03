@@ -16,7 +16,7 @@ function DraggingHandler.EnableDragging(Frame)
         if Input.UserInputType == Enum.UserInputType.MouseButton1 then
             Dragging = true
             DragStart = Input.Position
-            StartPosition = Frame.Position
+            StartPosition = Frame.Parent.Position
     
             Input.Changed:Connect(function()
                 if Input.UserInputState == Enum.UserInputState.End then
