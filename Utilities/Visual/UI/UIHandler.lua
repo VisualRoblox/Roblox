@@ -21,7 +21,7 @@ function UIHandler.LoadUI()
     -- // Create Instances
     local Container = Create('ScreenGui', {
         Parent = CoreGui,
-        Name = 'VisualAnalyser'
+        Name = Visual.Name
     }, {
         Create('Frame', {
             Name = 'Base',
@@ -93,7 +93,5 @@ function UIHandler.LoadUI()
 
     LoggingHandler.Log('Finished Loading UI')
 end
-
-UIHandler.LoadUI()
 
 return UIHandler

@@ -30,7 +30,7 @@ local Methods = {
 }
 local Visual = {
     Loaded = true,
-    Name = 'VisualAnalyser'
+    Name = game:GetService('HttpService'):GenerateGUID()
 }
 
 -- // Check Exploit Compatibility
@@ -61,9 +61,10 @@ function Environment.Import(URL)
     return table.unpack(Imported)
 end
 
+-- // Add Settings Table To Environment
+Environment.Visual = Visual
+
 -- // Imports
 local UIHandler = Import('UI/UIHandler.lua')
 UIHandler.LoadUI()
 
--- // Add Settings Table To Environment
-Environment.Visual = Visual
