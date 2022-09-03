@@ -9,7 +9,7 @@ function DraggingHandler.EnableDragging(Frame)
         
     local function Update(Input)
         local Delta = Input.Position - DragStart
-        Frame.Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
+        Frame.Parent.Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
     end
     
     Frame.InputBegan:Connect(function(Input)
