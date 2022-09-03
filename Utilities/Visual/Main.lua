@@ -45,7 +45,7 @@ for Index, _ in next, Methods do
 end
 
 if CheckedAmount < MethodsAmount then
-    error('Your Exploit Is Not Supported')
+    error('[Visual] Error: Your exploit is not supported.')
 end
 
 -- // Environment
@@ -53,7 +53,7 @@ local Environment = getgenv()
 Environment.Visual = Visual
 
 -- // Functions
-function Environment.Import(URL)
+function Environment:Import(URL)
     if Cache[URL] then
         return table.unpack(Cache[URL])
     end
@@ -67,4 +67,4 @@ end
 
 -- // Imports
 local UIHandler = Import('UI/UIHandler.lua')
-UIHandler.Loaded()
+UIHandler:LoadUI()
