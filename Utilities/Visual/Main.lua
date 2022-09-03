@@ -1,3 +1,6 @@
+-- // Services
+local HttpService = game:GetService('HttpService')
+
 -- // Variables
 local Cache = {}
 local MissingFunctions = {}
@@ -28,6 +31,10 @@ local Methods = {
     setreadonly,
     checkcaller
 }
+local Visual = {
+    Loaded = true,
+    Name = HttpService:GenerateGUID()
+}
 
 -- // Check Exploit Compatibility
 local MethodsAmount = #Methods
@@ -43,6 +50,7 @@ end
 
 -- // Environment
 local Environment = getgenv()
+Environment.Visual = Visual
 
 -- // Functions
 function Environment.Import(URL)
@@ -51,11 +59,12 @@ function Environment.Import(URL)
     end
 
     local BaseURL = 'https://raw.githubusercontent.com/VisualRoblox/Roblox/main/Utilities/Visual/'
-    local Imported = loadstring(game:HttpGet(BaseURL .. URL))
+    local Imported = { loadstring(game:HttpGet(BaseURL .. URL))() }
     Cache[URL] = Imported
 
     return table.unpack(Imported)
 end
 
 -- // Imports
-Import('UI/UIHandler.lua')
+local UIHandler = Import('UI/UIHandler.lua')
+UIHandler.Loaded()
