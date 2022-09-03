@@ -25,12 +25,11 @@ function DestroyUIHandler.DestroyUI()
         task.wait(0.25)
 
         UI.Base:Destroy()
-
         LoggingHandler.Log('UI Destroyed')
-    end
 
-    Visual.Loaded = false 
-    LoggingHandler.Log('Unloaded Visual Analyser')
+        Visual.Loaded = false 
+        LoggingHandler.Log('Unloaded Visual Analyser')
+    end
 end
 
 return DestroyUIHandler.DestroyUI
