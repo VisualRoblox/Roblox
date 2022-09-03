@@ -13,7 +13,7 @@ function UIHandler.LoadUI()
     print('LOADED')
     Create('ScreenGui', {
         Parent = CoreGui,
-        Name = 'x'
+        Name = Visual.Name
     }, {
         Create('Frame', {
             Name = 'Base',
