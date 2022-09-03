@@ -5,19 +5,14 @@ local UserInputService = game:GetService('UserInputService')
 local DraggingHandler = {}
 
 function DraggingHandler.EnableDragging(Frame)
-    local Dragging, DraggingInput, DragStart, StartPosition
-        
-    local function Update(Input)
-        local Delta = Input.Position - DragStart
-        Frame.Parent.Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, StartPosition.Y.Scale, StartPosition.Y.Offset + Delta.Y)
-    end
-    
+    local Dragging, DraggingInput, MousePosition, FramePosition
+
     Frame.InputBegan:Connect(function(Input)
         if Input.UserInputType == Enum.UserInputType.MouseButton1 then
             Dragging = true
-            DragStart = Input.Position
-            StartPosition = Frame.Parent.Position
-    
+            MousePosition = Input.Position
+            FramePosition = Frame.Parent.Position
+            
             Input.Changed:Connect(function()
                 if Input.UserInputState == Enum.UserInputState.End then
                     Dragging = false
@@ -25,16 +20,17 @@ function DraggingHandler.EnableDragging(Frame)
             end)
         end
     end)
-    
+
     Frame.InputChanged:Connect(function(Input)
         if Input.UserInputType == Enum.UserInputType.MouseMovement then
             DraggingInput = Input
         end
     end)
-    
-    UserInputService.InputChanged:Connect(function(Input)
+
+    Input.InputChanged:Connect(function(Input)
         if Input == DraggingInput and Dragging then
-            Update(Input)
+            local Delta = Input.Position - MousePosition
+            Frame.Parent.Position  = UDim2.new(FramePosition.X.Scale, FramePosition.X.Offset + Delta.X, FramePosition.Y.Scale, FramePosition.Y.Offset + Delta.Y)
         end
     end)
 end
