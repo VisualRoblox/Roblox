@@ -10,7 +10,7 @@ local DestroyUIHandler = {}
 function DestroyUIHandler.DestroyUI()
     LoggingHandler.Log('Destroy UI Called')
 
-    local Name = Visual.Name
+    local Name = 'VisualAnalyser'
 
     if CoreGui:FindFirstChild(Name) then
         local UI = CoreGui:FindFirstChild(Name)
