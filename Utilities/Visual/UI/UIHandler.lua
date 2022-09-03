@@ -3,7 +3,7 @@ local CoreGui = game:GetService('CoreGui')
 local UserInputService = game:GetService('UserInputService')
 
 -- // Imports
-local Create = Import('UI/Functions/Create.lua').Create
+local Create = Import('UI/Functions/Create.lua')
 local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
 -- // Variables
