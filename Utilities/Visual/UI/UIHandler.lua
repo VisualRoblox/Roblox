@@ -3,13 +3,14 @@ local CoreGui = game:GetService('CoreGui')
 local UserInputService = game:GetService('UserInputService')
 
 -- // Imports
-local Create = Import('UI/Functions/Create.lua')
+local Create = Import('UI/Functions/Create.lua').Create
 local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
 -- // Variables
 local UIHandler = {}
 
 function UIHandler.LoadUI()
+    print('LOADED')
     Create('ScreenGui', {
         Parent = CoreGui,
         Name = 'x'
