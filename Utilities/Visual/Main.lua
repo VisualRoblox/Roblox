@@ -53,7 +53,7 @@ local Environment = getgenv()
 Environment.Visual = Visual
 
 -- // Functions
-function Environment:Import(URL)
+function Environment.Import(URL)
     if Cache[URL] then
         return table.unpack(Cache[URL])
     end
@@ -67,4 +67,4 @@ end
 
 -- // Imports
 local UIHandler = Import('UI/UIHandler.lua')
-UIHandler:LoadUI()
+UIHandler.LoadUI()

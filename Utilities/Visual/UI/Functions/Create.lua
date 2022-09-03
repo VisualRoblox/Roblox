@@ -1,6 +1,6 @@
 local CreateHandler = {}
 
-function CreateHandler:Create(InstanceName, Properties, Children)
+function CreateHandler.Create(InstanceName, Properties, Children)
     local Object = Instance.new(InstanceName)
     local Properties = Properties or {}
     local Children = Children or {}
