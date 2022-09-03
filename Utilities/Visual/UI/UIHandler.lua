@@ -15,8 +15,8 @@ function UIHandler.LoadUI()
         Name = 'x'
     }, {
         Create('Frame', {
-            Name = 'Base'
-            Size = UDim2.new(0.5, 0, 0.5, 0)
+            Name = 'Base',
+            Size = UDim2.new(0.5, 0, 0.5, 0),
             Position = UDim2.new(0.25, 0, 0.25, 0)
         })
     })
