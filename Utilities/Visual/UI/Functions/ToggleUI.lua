@@ -17,6 +17,7 @@ function ToggleUIHandler.ToggleUI()
         Tween(OpenButton, {ImageTransparency = 0}, 0.25)
         OpenButton.OpenButtonBaseStroke.Thickness = 1
         Tween(Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
+        task.wait(0.25)
         Base.Visible = false
     else
         local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
