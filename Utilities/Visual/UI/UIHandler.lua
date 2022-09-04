@@ -97,8 +97,8 @@ function UIHandler.LoadUI()
     local Topbar = Base['Topbar']
 
     -- // Enable Dragging
-    EnableDragging(Topbar)
-        
+    EnableDragging(Base)
+
     LoggingHandler.Log('Finished Loading UI')
 end
 
