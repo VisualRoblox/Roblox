@@ -6,6 +6,7 @@ local UserInputService = game:GetService('UserInputService')
 local Create = Import('UI/Functions/Create.lua')
 local Tween = Import('UI/Functions/Tween.lua')
 local DestroyUI = Import('UI/Functions/DestroyUI.lua')
+local ToggleUI = Import('UI/Functions/ToggleUI.lua')
 local EnableDragging = Import('UI/Functions/Dragging.lua')
 local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
@@ -30,6 +31,7 @@ function UIHandler.LoadUI()
         Create('Frame', {
             Name = 'Base',
             Size = UDim2.new(0, 0, 0, 0),
+            AnchorPoint = Vector2.new(0.25, 0.25),
             Position = UDim2.new(0.25, 0, 0.25, 0),
             BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         }, {
@@ -42,7 +44,29 @@ function UIHandler.LoadUI()
                 Color = Color3.fromRGB(75, 75, 75),
                 Thickness = 1
             }),
-        }) 
+        }),
+        Create('ImageButton', {
+            Name = 'OpenButton',
+            BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+            BorderSizePixel = 0,
+            BackgroundTransparency = 1,
+            AnchorPoint = Vector2.new(0.5, 0),
+            Position = UDim2.new(0.5, 0, 0, 0),
+            Size = UDim2.new(0, 40, 0, 40),
+            AutoButtonColor = false,
+            Image = 'rbxassetid://10618644218',
+            ImageTransparency = 1,
+        }, {
+            Create('UICorner', {
+                Name = 'OpenButtonCorner',
+                CornerRadius = UDim.new(0, 100)
+            }),
+            Create('UIStroke', {
+                Name = 'OpenButtonBaseStroke',
+                Color = Color3.fromRGB(0, 150, 255),
+                Thickness = 0
+            }),
+        })
     })
 
     -- // Enable Dragging
@@ -92,12 +116,88 @@ function UIHandler.LoadUI()
             BorderSizePixel = 0,
             TextSize = 18,
             Text = 'Analyser'
-        })
+        }),
+        Create('TextButton', {
+            Name = 'CloseButton',
+            Position = UDim2.new(0, 625, 0, 0),
+            Size = UDim2.new(0, 25, 0, 25),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            AutoButtonColor = false,
+            Font = Enum.Font.Gotham,
+            TextYAlignment = Enum.TextYAlignment.Center,
+            BorderSizePixel = 0,
+            TextSize = 30,
+            Text = '×'
+        }),
+        Create('TextButton', {
+            Name = 'MinimiseButton',
+            Position = UDim2.new(0, 600, 0, 0),
+            Size = UDim2.new(0, 25, 0, 25),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            TextColor3 = Color3.fromRGB(255, 255, 255),
+            AutoButtonColor = false,
+            Font = Enum.Font.Gotham,
+            TextYAlignment = Enum.TextYAlignment.Center,
+            BorderSizePixel = 0,
+            TextSize = 30,
+            Text = '-'
+        }),
     })
     
     -- // Variables
     local Base = Container['Base']
     local Topbar = Base['Topbar']
+    local CloseButton = Topbar['CloseButton']
+    local MinimiseButton = Topbar['MinimiseButton']
+    local OpenButton = Container['OpenButton']
+
+    -- // Topbar Buttons
+    CloseButton.MouseEnter:Connect(function()
+        Tween(CloseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+    end)
+
+    CloseButton.MouseLeave:Connect(function()
+        Tween(CloseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+    end)
+
+    CloseButton.MouseButton1Click:Connect(function()
+        Tween(CloseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+        task.wait(0.25)
+        Tween(CloseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+        DestroyUI()
+    end)
+
+    MinimiseButton.MouseEnter:Connect(function()
+        Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+    end)
+
+    MinimiseButton.MouseLeave:Connect(function()
+        Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+    end)
+
+    MinimiseButton.MouseButton1Click:Connect(function()
+        Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+        task.wait(0.25)
+        Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+        ToggleUI()
+    end)
+
+    -- // Minimised Button
+    OpenButton.MouseEnter:Connect(function()
+        Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(30, 30, 30)}, 0.25)
+    end)
+
+    OpenButton.MouseLeave:Connect(function()
+        Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, 0.25)
+    end)
+
+    OpenButton.MouseButton1Click:Connect(function()
+        Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(30, 30, 30)}, 0.25)
+        task.wait(0.25)
+        Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, 0.25)
+        ToggleUI()
+    end)
 
     LoggingHandler.Log('Finished Loading UI')
 end
