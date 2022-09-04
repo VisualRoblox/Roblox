@@ -10,16 +10,16 @@ local ToggleUIHandler = {}
 function ToggleUIHandler.ToggleUI()
     LoggingHandler.Log('Toggle UI Called')
 
-    if CoreGui:WaitForChild('VisualAnalyser'):WaitForChild('Base').Visible then
-        local Base = CoreGui:WaitForChild('VisualAnalyser').Base
-        local OpenButton = CoreGui:WaitForChild('VisualAnalyser').OpenButton
+    if CoreGui:FindFirstChild('VisualAnalyser'):FindFirstChild('Base').Visible then
+        local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
+        local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
         Tween(OpenButton, {BackgroundTransparency = 0}, 0.25)
         Tween(OpenButton, {ImageTransparency = 0}, 0.25)
         OpenButton.OpenButtonBaseStroke.Thickness = 1
         Tween(Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
     else
-        local Base = CoreGui:WaitForChild('VisualAnalyser').Base
-        local OpenButton = CoreGui:WaitForChild('VisualAnalyser').OpenButton
+        local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
+        local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
         Tween(OpenButton, {BackgroundTransparency = 1}, 0.25)
         Tween(OpenButton, {ImageTransparency = 1}, 0.25)
         OpenButton.OpenButtonBaseStroke.Thickness = 0
@@ -27,4 +27,4 @@ function ToggleUIHandler.ToggleUI()
     end
 end
 
-return ToggleUIHandler.ToggleUI()
+return ToggleUIHandler.ToggleUI
