@@ -76,7 +76,7 @@ function UIHandler.LoadUI()
     Tween(Container['Base'], {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
     task.wait(0.25)
     
-    -- // Create More Instances
+    -- // Topbar
     Create('Frame', {
         Name = 'Topbar',
         Parent = Container['Base'],
@@ -97,7 +97,7 @@ function UIHandler.LoadUI()
         }),
         Create('TextLabel', {
             Name = 'TitleSectionOne',
-            Position = UDim2.new(0, 5, 0, 3),
+            Position = UDim2.new(0, 5, 0, 4),
             Size = UDim2.new(0, 50, 0, 20),
             BackgroundColor3 = Color3.fromRGB(30, 30, 30),
             TextColor3 = Color3.fromRGB(0, 150, 255),
@@ -108,7 +108,7 @@ function UIHandler.LoadUI()
         }),
         Create('TextLabel', {
             Name = 'TitleSectionTwo',
-            Position = UDim2.new(0, 61, 0, 3),
+            Position = UDim2.new(0, 61, 0, 4),
             Size = UDim2.new(0, 65, 0, 20),
             BackgroundColor3 = Color3.fromRGB(30, 30, 30),
             TextColor3 = Color3.fromRGB(255, 255, 255),
@@ -129,6 +129,11 @@ function UIHandler.LoadUI()
             BorderSizePixel = 0,
             TextSize = 30,
             Text = '×'
+        }, {
+            Create('UICorner', {
+                Name = 'CloseButtonCorner',
+                CornerRadius = UDim.new(0, 5)
+            }),
         }),
         Create('TextButton', {
             Name = 'MinimiseButton',
@@ -142,9 +147,45 @@ function UIHandler.LoadUI()
             BorderSizePixel = 0,
             TextSize = 30,
             Text = '-'
+        }, {
+            Create('UICorner', {
+                Name = 'MinimiseButtonCorner',
+                CornerRadius = UDim.new(0, 5)
+            }),
         }),
     })
     
+    -- // Sidebar
+    Create('Frame', {
+        Name = 'Sidebar',
+        Parent = Container['Base'],
+        Position = UDim2.new(0, 0, 0, 27),
+        Size = UDim2.new(0, 135, 0, 348),
+        BorderSizePixel = 0,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }, {
+        Create('UIStroke', {
+            Name = 'SidebarStroke',
+            Color = Color3.fromRGB(75, 75, 75),
+            Thickness = 1
+        }),
+        Create('UICorner', {
+            Name = 'SidebarCorner',
+            CornerRadius = UDim.new(0, 5)
+        }),
+        Create('ScrollingFrame', {
+            Name = 'SidebarScrolling',
+            Parent = Container['Base'],
+            Position = UDim2.new(0, 0, 0, 0),
+            Size = UDim2.new(0, 135, 0, 343),
+            BorderSizePixel = 0,
+            ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
+            ScrollBarThickness = 0,
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        })
+    })
+
+
     -- // Variables
     local Base = Container['Base']
     local Topbar = Base['Topbar']
