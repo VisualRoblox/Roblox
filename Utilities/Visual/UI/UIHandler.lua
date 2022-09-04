@@ -45,6 +45,9 @@ function UIHandler.LoadUI()
         }) 
     })
 
+    -- // Enable Dragging
+    EnableDragging(Container['Base'])
+
     -- // Animated Loading (#1)
     Tween(Container['Base'], {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
     task.wait(0.25)
@@ -95,9 +98,6 @@ function UIHandler.LoadUI()
     -- // Variables
     local Base = Container['Base']
     local Topbar = Base['Topbar']
-
-    -- // Enable Dragging
-    EnableDragging(Base)
 
     LoggingHandler.Log('Finished Loading UI')
 end
