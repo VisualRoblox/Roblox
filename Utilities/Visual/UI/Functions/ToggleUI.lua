@@ -3,6 +3,7 @@ local CoreGui = game:GetService('CoreGui')
 
 -- // Imports
 local Tween = Import('UI/Functions/Tween.lua')
+local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
 local ToggleUIHandler = {}
 
