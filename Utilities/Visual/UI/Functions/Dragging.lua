@@ -1,10 +1,8 @@
--- // Services
-local CoreGui = game:GetService('CoreGui')
-local UserInputService = game:GetService('UserInputService')
-
 local DraggingHandler = {}
 
 function DraggingHandler.EnableDragging(Frame)
+    local UserInputService = game:GetService('UserInputService')
+
     local Dragging, DraggingInput, MousePosition, FramePosition
 
     Frame.InputBegan:Connect(function(Input)
