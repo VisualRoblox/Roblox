@@ -27,7 +27,7 @@ function DraggingHandler.EnableDragging(Frame)
         end
     end)
 
-    Input.InputChanged:Connect(function(Input)
+    UserInputService.InputChanged:Connect(function(Input)
         if Input == DraggingInput and Dragging then
             local Delta = Input.Position - MousePosition
             Frame.Parent.Position  = UDim2.new(FramePosition.X.Scale, FramePosition.X.Offset + Delta.X, FramePosition.Y.Scale, FramePosition.Y.Offset + Delta.Y)
