@@ -3,13 +3,10 @@ local CoreGui = game:GetService('CoreGui')
 
 -- // Imports
 local Tween = Import('UI/Functions/Tween.lua')
-local LoggingHandler = Import('Logging/LoggingHandler.lua')
 
 local ToggleUIHandler = {}
 
 function ToggleUIHandler.ToggleUI()
-    LoggingHandler.Log('Toggle UI Called')
-
     if CoreGui:FindFirstChild('VisualAnalyser').Base.Visible then
         local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
         local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
