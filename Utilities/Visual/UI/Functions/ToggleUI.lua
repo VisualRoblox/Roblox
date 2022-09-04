@@ -7,7 +7,7 @@ local Tween = Import('UI/Functions/Tween.lua')
 local ToggleUIHandler = {}
 
 function ToggleUIHandler.ToggleUI()
-    if CoreGui:FindFirstChild('VisualAnalyser').Base.Visible then
+    if CoreGui:FindFirstChild('VisualAnalyser'):FindFirstChild('Base').Visible then
         local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
         local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
         Tween(OpenButton, {BackgroundTransparency = 0}, 0.25)
