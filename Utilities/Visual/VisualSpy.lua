@@ -8,7 +8,7 @@ local UtilityFunctions = {}
 local UIFunctions = {}
 local Visual = {
     Loaded = true,
-    Name = 'VisualAnalyser'
+    Name = 'VisualSpy'
 }
 
 -- // Utility Functions
@@ -23,6 +23,38 @@ do
             warn('[ Visual ] Warning: ' .. Message)
         end
     end
+
+    function UtilityFunctions:HasMethods(Name)
+        local CurrentIndex = 0
+        local Methods = {
+            ['Remote Spy'] = {
+                getcallingscript,
+                hookmetamethod,
+                getnamecallmethod,
+                newcclosure,
+                setclipboard,
+                function() end
+            },
+            ['HTTP Spy'] = {
+                hookfunction,
+                newcclosure,
+                setclipboard,
+                function() end
+            }
+        }
+
+        local MethodsAmount = #Methods[Name]
+        
+        for Index, _ in next, Methods[Name] do
+            CurrentIndex += 1
+        end
+
+        if CurrentIndex < MethodsAmount then
+            return false
+        else
+            return true
+        end
+    end
 end
 
 -- // UI Functions
@@ -35,7 +67,7 @@ do
     function UIFunctions:Destroy()
         UtilityFunctions:Log('Log', 'Destroy UI Called')
         for _, UI in next, CoreGui:GetChildren() do
-            if UI.Name == 'VisualAnalyser' then
+            if UI.Name == 'VisualSpy' then
                 for _, Item in next, UI.Base:GetChildren() do
                     if Item.Name ~= 'BaseCorner' and Item.Name ~= 'BaseStroke' then
                         Item:Destroy()
@@ -74,17 +106,17 @@ do
 
     function UIFunctions:Toggle()
         UtilityFunctions:Log('Log', 'Toggle UI Called')
-        if CoreGui:FindFirstChild('VisualAnalyser'):FindFirstChild('Base').Visible then
-            local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
-            local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
+        if CoreGui:FindFirstChild('VisualSpy'):FindFirstChild('Base').Visible then
+            local Base = CoreGui:FindFirstChild('VisualSpy').Base
+            local OpenButton = CoreGui:FindFirstChild('VisualSpy').OpenButton
             OpenButton.Visible = true
             UIFunctions:Tween(OpenButton, {BackgroundTransparency = 0}, 0.25)
             UIFunctions:Tween(OpenButton, {ImageTransparency = 0}, 0.25)
             OpenButton.OpenButtonBaseStroke.Thickness = 1
             Base.Visible = false
         else
-            local Base = CoreGui:FindFirstChild('VisualAnalyser').Base
-            local OpenButton = CoreGui:FindFirstChild('VisualAnalyser').OpenButton
+            local Base = CoreGui:FindFirstChild('VisualSpy').Base
+            local OpenButton = CoreGui:FindFirstChild('VisualSpy').OpenButton
             UIFunctions:Tween(OpenButton, {BackgroundTransparency = 1}, 0.25)
             UIFunctions:Tween(OpenButton, {ImageTransparency = 1}, 0.25)
             OpenButton.OpenButtonBaseStroke.Thickness = 0
@@ -142,7 +174,7 @@ UtilityFunctions:Log('Log', 'Initialising UI...')
 -- // Create Instances
 local Container = UIFunctions:Create('ScreenGui', {
     Parent = CoreGui,
-    Name = 'VisualAnalyser'
+    Name = 'VisualSpy'
 }, {
     UIFunctions:Create('Frame', {
         Name = 'Base',
@@ -224,14 +256,14 @@ UIFunctions:Create('Frame', {
     }),
     UIFunctions:Create('TextLabel', {
         Name = 'TitleSectionTwo',
-        Position = UDim2.new(0, 61, 0, 4),
-        Size = UDim2.new(0, 65, 0, 20),
+        Position = UDim2.new(0, 57, 0, 4),
+        Size = UDim2.new(0, 35, 0, 20),
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         TextColor3 = Color3.fromRGB(255, 255, 255),
         Font = Enum.Font.Gotham,
         BorderSizePixel = 0,
         TextSize = 18,
-        Text = 'Analyser'
+        Text = 'Spy'
     }),
     UIFunctions:Create('TextButton', {
         Name = 'CloseButton',
@@ -276,9 +308,10 @@ UIFunctions:Create('Frame', {
     Name = 'Sidebar',
     Parent = Container['Base'],
     Position = UDim2.new(0, 0, 0, 27),
-    Size = UDim2.new(0, 135, 0, 348),
+    Size = UDim2.new(0, 150, 0, 348),
     BorderSizePixel = 0,
-    BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+    ZIndex = 2
 }, {
     UIFunctions:Create('UIStroke', {
         Name = 'SidebarStroke',
@@ -292,12 +325,60 @@ UIFunctions:Create('Frame', {
     UIFunctions:Create('ScrollingFrame', {
         Name = 'SidebarScrolling',
         Parent = Container['Base'],
-        Position = UDim2.new(0, 0, 0, 0),
-        Size = UDim2.new(0, 135, 0, 343),
+        Position = UDim2.new(0, 0, 0, 2),
+        Size = UDim2.new(0, 150, 0, 343),
         BorderSizePixel = 0,
         ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
         ScrollBarThickness = 0,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        ZIndex = 2
+    }, {
+        UIFunctions:Create('UIListLayout', {
+            Name = 'SidebarScrollingListLayout',
+            HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            SortOrder = Enum.SortOrder.LayoutOrder,
+            Padding = UDim.new(0, -3)
+        })
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SidebarFiller1',
+        Position = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SidebarFiller2',
+        Position = UDim2.new(0, 145, 0, 0),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SidebarFiller3',
+        Position = UDim2.new(0, 145, 0, 343),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SidebarLine1',
+        Position = UDim2.new(0, 150, 0, 0),
+        Size = UDim2.new(0, 1, 0, 10),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SidebarLine2',
+        Position = UDim2.new(0, 150, 0, 338),
+        Size = UDim2.new(0, 1, 0, 10),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(75, 75, 75)
     })
 })
 
@@ -305,8 +386,8 @@ UIFunctions:Create('Frame', {
 UIFunctions:Create('Frame', {
     Name = 'TabHolderFrame',
     Parent = Container['Base'],
-    Position = UDim2.new(0, 136, 0, 27),
-    Size = UDim2.new(0, 514, 0, 348),
+    Position = UDim2.new(0, 151, 0, 27),
+    Size = UDim2.new(0, 499, 0, 348),
     BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 }, {
     UIFunctions:Create('UICorner', {
@@ -326,6 +407,8 @@ local MinimiseButton = Topbar['MinimiseButton']
 local OpenButton = Container['OpenButton']
 local TabHolderFrame = Base['TabHolderFrame']
 local TabHolderFolder = TabHolderFrame['TabHolderFolder']
+local Sidebar = Base['Sidebar']
+local SidebarScrolling = Sidebar['SidebarScrolling']
 
 -- // Topbar Buttons
 CloseButton.MouseEnter:Connect(function()
@@ -375,17 +458,18 @@ OpenButton.MouseButton1Click:Connect(function()
 end)
 
 -- // Tab Functions
-local Tabs = {}
-
-function Tabs:CreateTab(Name, Visible)
+local DebounceAmount = 0.25
+local Debounce = false
+local function CreateTab(Name, IsVisible)
     local Name = Name or 'Tab'
-    local Visible = Visible or true
 
+    -- // Main
     UIFunctions:Create('Frame', {
         Name = Name .. 'Tab',
-        Parent = TabHolderFolder,,
-        Size = UDim2.new(0, 514, 0, 348),
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        Parent = TabHolderFolder,
+        Size = UDim2.new(0, 499, 0, 348),
+        BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+        Visible = IsVisible
     }, {
         UIFunctions:Create('UICorner', {
             Name = Name .. 'TabCorner',
@@ -393,6 +477,84 @@ function Tabs:CreateTab(Name, Visible)
         })
     })
     
+    -- // Buttons
+    UIFunctions:Create('TextButton', {
+        Name = Name .. 'TabButton',
+        Parent = SidebarScrolling,
+        Size = UDim2.new(0, 135, 0, 25),
+        TextColor3 = Color3.fromRGB(175, 175, 175),
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        Font = Enum.Font.Gotham,
+        Text = Name,
+        BorderSizePixel = 0,
+        TextSize = 16,
+        AutoButtonColor = false,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        ZIndex = 2,
+    }, {
+        UIFunctions:Create('UIPadding', {
+            Name = Name .. 'TabButtonTextPadding',
+            PaddingLeft = UDim.new(0, 5)
+        })
+    })
+
+    local Tab = TabHolderFolder[Name .. 'Tab']
+    local TabButton = SidebarScrolling[Name .. 'TabButton']
+
+    if IsVisible then
+        UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+    end
+    
+    TabButton.MouseEnter:Connect(function()
+        if Tab.Visible then
+            UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+        else
+            UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
+        end
+    end)
+    
+    TabButton.MouseLeave:Connect(function()
+        if Tab.Visible then
+            UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+        else
+            UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+        end
+    end)
+
+    TabButton.MouseButton1Click:Connect(function()
+        local HasMethods = UtilityFunctions:HasMethods(Name)
+        if HasMethods then
+            if not Debounce then
+                task.spawn(function()
+                    Debounce = true
+                    task.wait(DebounceAmount)
+                    Debounce = false
+                end)
+
+                for _, OtherTab in next, TabHolderFolder:GetChildren() do
+                    OtherTab.Visible = false
+                end
+
+                for _, OtherTabButton in next, SidebarScrolling:GetChildren() do
+                    if OtherTabButton:IsA('TextButton') then
+                        UIFunctions:Tween(OtherTabButton, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                    end
+                end
+
+                UIFunctions:Tween(TabButton, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                Tab.Visible = true
+            end
+        else
+            -- // PROMPT
+            print(HasMethods)
+        end
+    end)
+
+    return Tab
 end
+
+-- // Create Tabs
+local RemoteSpy = CreateTab('Remote Spy', true)
+local HTTPSpy = CreateTab('HTTP Spy', false)
 
 UtilityFunctions:Log('Log', 'Finished Loading UI')
