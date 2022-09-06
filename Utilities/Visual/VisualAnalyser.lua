@@ -301,12 +301,31 @@ UIFunctions:Create('Frame', {
     })
 })
 
+-- // Tabs Holder
+UIFunctions:Create('Frame', {
+    Name = 'TabHolderFrame',
+    Parent = Container['Base'],
+    Position = UDim2.new(0, 136, 0, 27),
+    Size = UDim2.new(0, 514, 0, 348),
+    BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+}, {
+    UIFunctions:Create('UICorner', {
+        Name = 'TabHolderFrameCorner',
+        CornerRadius = UDim.new(0, 5)
+    }),
+    UIFunctions:Create('Folder', {
+        Name = 'TabHolderFolder',
+    })
+})
+
 -- // Variables
 local Base = Container['Base']
 local Topbar = Base['Topbar']
 local CloseButton = Topbar['CloseButton']
 local MinimiseButton = Topbar['MinimiseButton']
 local OpenButton = Container['OpenButton']
+local TabHolderFrame = Base['TabHolderFrame']
+local TabHolderFolder = TabHolderFrame['TabHolderFolder']
 
 -- // Topbar Buttons
 CloseButton.MouseEnter:Connect(function()
@@ -354,5 +373,26 @@ OpenButton.MouseButton1Click:Connect(function()
     UIFunctions:Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, 0.25)
     UIFunctions:Toggle()
 end)
+
+-- // Tab Functions
+local Tabs = {}
+
+function Tabs:CreateTab(Name, Visible)
+    local Name = Name or 'Tab'
+    local Visible = Visible or true
+
+    UIFunctions:Create('Frame', {
+        Name = Name .. 'Tab',
+        Parent = TabHolderFolder,,
+        Size = UDim2.new(0, 514, 0, 348),
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }, {
+        UIFunctions:Create('UICorner', {
+            Name = Name .. 'TabCorner',
+            CornerRadius = UDim.new(0, 5)
+        })
+    })
+    
+end
 
 UtilityFunctions:Log('Log', 'Finished Loading UI')
