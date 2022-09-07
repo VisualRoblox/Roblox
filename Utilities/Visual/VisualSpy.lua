@@ -690,6 +690,7 @@ local Container = UIFunctions:Create('ScreenGui', {
             BorderSizePixel = 0,
             Size = UDim2.new(0, 650, 0, 375),
             ZIndex = 5,
+            BackgroundTransparency = 1,
             Visible = true,
             BackgroundColor3 = Color3.fromRGB(35, 35, 35)
         }, {
@@ -924,6 +925,18 @@ local TabHolderFrame = Base['TabHolderFrame']
 local TabHolderFolder = TabHolderFrame['TabHolderFolder']
 local Sidebar = Base['Sidebar']
 local SidebarScrolling = Sidebar['SidebarScrolling']
+local SidebarScrollingListLayout = SidebarScrolling['SidebarScrollingListLayout']
+
+-- // Update Sidebar Canvas Size
+SidebarScrolling.ChildAdded:Connect(function()
+    local CanvasSize = SidebarScrollingListLayout.AbsoluteContentSize
+
+    SidebarScrolling.CanvasSize = UDim2.new(0, CanvasSize.X, 0, CanvasSize.Y)
+end)
+
+local CanvasSize = SidebarScrollingListLayout.AbsoluteContentSize
+
+SidebarScrolling.CanvasSize = UDim2.new(0, CanvasSize.X, 0, CanvasSize.Y)
 
 -- // Topbar Buttons
 CloseButton.MouseEnter:Connect(function()
@@ -1121,8 +1134,7 @@ local function CreateTab(Name, IsVisible)
                 Tab.Visible = true
             end
         else
-            -- // PROMPT
-            print(HasMethods)
+            UIFunctions:CreatePrompt('Text', 'Warning', 'Your exploit is not supported.', 'Alright')
         end
     end)
 
@@ -1133,6 +1145,121 @@ end
 local RemoteSpy = CreateTab('Remote Spy', true)
 local HTTPSpy = CreateTab('HTTP Spy', false)
 
-UIFunctions:CreatePrompt('Text', 'Prompt Title', 'Prompt Text', 'Alright')
+
+
+-- // Remote Spy
+UIFunctions:Create('ScrollingFrame', {
+    Name = 'RemoteList',
+    Parent = RemoteSpy,
+    Position = UDim2.new(0, 0, 0, 0),
+    Size = UDim2.new(0, 135, 0, 348),
+    BorderSizePixel = 0,
+    ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
+    ScrollBarThickness = 1,
+    BackgroundColor3 = Color3.fromRGB(32, 32, 32),
+    ZIndex = 2
+}, {
+    UIFunctions:Create('UIListLayout', {
+        Name = 'RemoteListLayout',
+        HorizontalAlignment = Enum.HorizontalAlignment.Center,
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Padding = UDim.new(0, 2)
+    }),
+    UIFunctions:Create('UIStroke', {
+        Name = 'RemoteListStroke',
+        Color = Color3.fromRGB(75, 75, 75),
+        Thickness = 1
+    })
+})
+
+UIFunctions:Create('ScrollingFrame', {
+    Name = 'GeneratedScriptHolder',
+    Active = true,
+    BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+    BorderSizePixel = 0,
+    Position = UDim2.new(0, 0, 0, 0),
+    ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
+    Size = UDim2.new(0, 268, 0, 348),
+    ScrollBarThickness = 1
+})
+
+UIFunctions:Create('Frame', {
+    Name = 'SettingsList',
+    Parent = RemoteSpy,
+    Position = UDim2.new(0, 434, 0, 0),
+    Size = UDim2.new(0, 50, 0, 348),
+    BorderSizePixel = 0,
+    BackgroundColor3 = Color3.fromRGB(32, 32, 32),
+    ZIndex = 2
+}, {
+    UIFunctions:Create('UICorner', {
+        Name = 'SettingsListCorner',
+        CornerRadius = UDim.new(0, 5)
+    }),
+    UIFunctions:Create('UIStroke', {
+        Name = 'SettingsListStroke',
+        Color = Color3.fromRGB(75, 75, 75),
+        Thickness = 1
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsListFiller1',
+        Position = UDim2.new(0, 0, 0, 0),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsListFiller2',
+        Position = UDim2.new(0, 0, 0, 343),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsListFiller3',
+        Position = UDim2.new(0, 45, 0, 0),
+        Size = UDim2.new(0, 5, 0, 5),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsListLine1',
+        Position = UDim2.new(0, -1, 0, 0),
+        Size = UDim2.new(0, 1, 0, 10),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsListLine2',
+        Position = UDim2.new(0, -1, 0, 338),
+        Size = UDim2.new(0, 1, 0, 10),
+        BorderSizePixel = 0,
+        ZIndex = 2,
+        BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    }),
+})
+
+local RemoteList = RemoteSpy['RemoteList']
+local RemoteListLayout = RemoteList['RemoteListLayout']
+
+RemoteList.ChildAdded:Connect(function()
+    local CanvasSize = RemoteListLayout.AbsoluteContentSize
+
+    RemoteList.CanvasSize = UDim2.new(0, CanvasSize.X, 0, CanvasSize.Y)
+end)
+
+local CanvasSize = RemoteListLayout.AbsoluteContentSize
+
+RemoteList.CanvasSize = UDim2.new(0, CanvasSize.X, 0, CanvasSize.Y)
+
+
+
+-- // HTTP Spy
+
+
 
 UtilityFunctions:Log('Log', 'Finished Loading UI')
