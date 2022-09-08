@@ -9,7 +9,8 @@ local UtilityFunctions = {}
 local UIFunctions = {}
 local Visual = {
     Loaded = true,
-    Name = 'VisualSpy'
+    Name = 'VisualSpy',
+    ClickThrough = true
 }
 
 -- // Utility Functions
@@ -181,6 +182,7 @@ do
 
         if Type == 'Text' then
             local ButtonText = ...
+            Visual.ClickThrough = false
             UIFunctions:Create('Frame', {
                 Name = Title..'PromptFrame',
                 Parent = CoreGui:WaitForChild(Visual.Name):WaitForChild('Base'):WaitForChild('PromptHolder'),
@@ -312,12 +314,14 @@ do
                 UIFunctions:Tween(PromptHolder, {BackgroundTransparency = 1}, 0.25)
                 task.wait()
                 PromptFrame:Destroy()
+                VisualClickThrough = true
             end)
 
         elseif Type == 'OneButton' then
             local Args = ...
             local ButtonText = Args[1]
             local ButtonCallback = Args[2]
+            Visual.ClickThrough = false
             UIFunctions:Create('Frame', {
                 Name = Title..'PromptFrame',
                 Parent = CoreGui:WaitForChild(Visual.Name):WaitForChild('Base'):WaitForChild('PromptHolder'),
@@ -450,6 +454,7 @@ do
                 UIFunctions:Tween(PromptHolder, {BackgroundTransparency = 1}, 0.25)
                 task.wait()
                 PromptFrame:Destroy()
+                Visual.ClickThrough = true
             end)
             
         elseif Type == 'TwoButton' then
@@ -458,6 +463,7 @@ do
             local Button1Callback = Args[2]
             local Button2Text = Args[3]
             local Button2Callback = Args[4]
+            Visual.ClickThrough = false
             UIFunctions:Create('Frame', {
                 Name = Title..'PromptFrame',
                 Parent = CoreGui:WaitForChild(Visual.Name):WaitForChild('Base'):WaitForChild('PromptHolder'),
@@ -627,6 +633,7 @@ do
                 UIFunctions:Tween(PromptHolder, {BackgroundTransparency = 1}, 0.25)
                 task.wait()
                 PromptFrame:Destroy()
+                Visual.ClickThrough = true
             end)
 
             Button2.MouseEnter:Connect(function(Input)
@@ -656,6 +663,7 @@ do
                 UIFunctions:Tween(PromptHolder, {BackgroundTransparency = 1}, 0.25)
                 task.wait()
                 PromptFrame:Destroy()
+                Visual.ClickThrough = true
             end)
         end
     end
@@ -681,6 +689,7 @@ local Container = UIFunctions:Create('ScreenGui', {
         Size = UDim2.new(0, 0, 0, 0),
         AnchorPoint = Vector2.new(0.25, 0.25),
         Position = UDim2.new(0.25, 0, 0.25, 0),
+        Visible = false,
         BackgroundColor3 = Color3.fromRGB(35, 35, 35)
     }, {
         UIFunctions:Create('Frame', {
@@ -708,6 +717,22 @@ local Container = UIFunctions:Create('ScreenGui', {
             Color = Color3.fromRGB(75, 75, 75),
             Thickness = 1
         }),
+        UIFunctions:Create('Frame', {
+            Name = 'SettingsTabHolder',
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            BorderSizePixel = 0,
+            BackgroundTransparency = 1,
+            Size = UDim2.new(0, 650, 0, 375),
+            ZIndex = 6,
+            Visible = true,
+            BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+        }, {
+            UIFunctions:Create('UICorner', {
+                CornerRadius = UDim.new(0, 5),
+                Name = 'SettingsTabHolderCorner'
+            })
+        }),
     }),
     UIFunctions:Create('ImageButton', {
         Name = 'OpenButton',
@@ -732,13 +757,6 @@ local Container = UIFunctions:Create('ScreenGui', {
         }),
     })
 })
-
--- // Enable Dragging
-UIFunctions:EnableDragging(Container['Base'])
-
--- // Animated Loading (#1)
-UIFunctions:Tween(Container['Base'], {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
-task.wait(0.25)
 
 -- // Topbar
 UIFunctions:Create('Frame', {
@@ -926,6 +944,7 @@ local TabHolderFolder = TabHolderFrame['TabHolderFolder']
 local Sidebar = Base['Sidebar']
 local SidebarScrolling = Sidebar['SidebarScrolling']
 local SidebarScrollingListLayout = SidebarScrolling['SidebarScrollingListLayout']
+local SettingsTabHolder = Base['SettingsTabHolder']
 
 -- // Update Sidebar Canvas Size
 SidebarScrolling.ChildAdded:Connect(function()
@@ -948,10 +967,12 @@ CloseButton.MouseLeave:Connect(function()
 end)
 
 CloseButton.MouseButton1Click:Connect(function()
-    UIFunctions:Tween(CloseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
-    task.wait(0.25)
-    UIFunctions:Tween(CloseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
-    UIFunctions:Destroy()
+    if Visual.ClickThrough then
+        UIFunctions:Tween(CloseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+        task.wait(0.25)
+        UIFunctions:Tween(CloseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+        UIFunctions:Destroy()
+    end
 end)
 
 MinimiseButton.MouseEnter:Connect(function()
@@ -963,10 +984,12 @@ MinimiseButton.MouseLeave:Connect(function()
 end)
 
 MinimiseButton.MouseButton1Click:Connect(function()
-    UIFunctions:Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
-    task.wait(0.25)
-    UIFunctions:Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
-    UIFunctions:Toggle()
+    if Visual.ClickThrough then
+        UIFunctions:Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(125, 125, 125)}, 0.25)
+        task.wait(0.25)
+        UIFunctions:Tween(MinimiseButton, {TextColor3 = Color3.fromRGB(255, 255, 255)}, 0.25)
+        UIFunctions:Toggle()
+    end
 end)
 
 -- // Minimised Button
@@ -979,10 +1002,12 @@ OpenButton.MouseLeave:Connect(function()
 end)
 
 OpenButton.MouseButton1Click:Connect(function()
-    UIFunctions:Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(30, 30, 30)}, 0.25)
-    task.wait(0.25)
-    UIFunctions:Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, 0.25)
-    UIFunctions:Toggle()
+    if Visual.ClickThrough then
+        UIFunctions:Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(30, 30, 30)}, 0.25)
+        task.wait(0.25)
+        UIFunctions:Tween(OpenButton, {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}, 0.25)
+        UIFunctions:Toggle()
+    end
 end)
 
 -- // Tab Functions
@@ -1108,33 +1133,36 @@ local function CreateTab(Name, IsVisible)
     end)
 
     TabButton.MouseButton1Click:Connect(function()
-        local HasMethods = UtilityFunctions:HasMethods(Name)
-        if HasMethods then
-            if not Debounce then
-                task.spawn(function()
-                    Debounce = true
-                    task.wait(DebounceAmount)
-                    Debounce = false
-                end)
+        print(Visual.ClickThrough)
+        if Visual.ClickThrough then
+            local HasMethods = UtilityFunctions:HasMethods(Name)
+            if HasMethods then
+                if not Debounce then
+                    task.spawn(function()
+                        Debounce = true
+                        task.wait(DebounceAmount)
+                        Debounce = false
+                    end)
 
-                for _, OtherTab in next, TabHolderFolder:GetChildren() do
-                    OtherTab.Visible = false
-                end
-
-                for _, Item in next, SidebarScrolling:GetDescendants() do
-                    if Item:IsA('TextLabel') then
-                        UIFunctions:Tween(Item, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
-                    elseif Item:IsA('ImageLabel') then
-                        UIFunctions:Tween(Item, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                    for _, OtherTab in next, TabHolderFolder:GetChildren() do
+                        OtherTab.Visible = false
                     end
-                end
 
-                UIFunctions:Tween(TabLabel, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
-                UIFunctions:Tween(TabIcon, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
-                Tab.Visible = true
+                    for _, Item in next, SidebarScrolling:GetDescendants() do
+                        if Item:IsA('TextLabel') then
+                            UIFunctions:Tween(Item, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                        elseif Item:IsA('ImageLabel') then
+                            UIFunctions:Tween(Item, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                        end
+                    end
+
+                    UIFunctions:Tween(TabLabel, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                    UIFunctions:Tween(TabIcon, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                    Tab.Visible = true
+                end
+            else
+                UIFunctions:CreatePrompt('Text', 'Warning', 'Your exploit is not supported.', 'Alright')
             end
-        else
-            UIFunctions:CreatePrompt('Text', 'Warning', 'Your exploit is not supported.', 'Alright')
         end
     end)
 
@@ -1184,63 +1212,70 @@ UIFunctions:Create('ScrollingFrame', {
 })
 
 UIFunctions:Create('Frame', {
-    Name = 'SettingsList',
+    Name = 'SettingsSlideOutHolder',
+    Size = UDim2.new(0, 40, 0, 40),
+    BackgroundColor3 = Color3.fromRGB(30, 30, 30),
     Parent = RemoteSpy,
-    Position = UDim2.new(0, 434, 0, 0),
-    Size = UDim2.new(0, 50, 0, 348),
-    BorderSizePixel = 0,
-    BackgroundColor3 = Color3.fromRGB(32, 32, 32),
-    ZIndex = 2
+    AnchorPoint = Vector2.new(1, 0),
+    Position = UDim2.new(1, 0, 0, 0),
+    ZIndex = 5,
+    Visible = true,
+    BackgroundTransparency = 0
 }, {
     UIFunctions:Create('UICorner', {
-        Name = 'SettingsListCorner',
-        CornerRadius = UDim.new(0, 5)
+        Name = 'SettingsSlideOutHolderCorner',
+        CornerRadius = UDim.new(0, 100)
     }),
     UIFunctions:Create('UIStroke', {
-        Name = 'SettingsListStroke',
+        Name = 'SettingsSlideOutHolderStroke',
         Color = Color3.fromRGB(75, 75, 75),
         Thickness = 1
     }),
     UIFunctions:Create('Frame', {
-        Name = 'SettingsListFiller1',
+        Name = 'SettingsSlideOutHolderFiller1',
         Position = UDim2.new(0, 0, 0, 0),
-        Size = UDim2.new(0, 5, 0, 5),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 20, 0, 20),
         BorderSizePixel = 0,
-        ZIndex = 2,
+        ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     }),
     UIFunctions:Create('Frame', {
-        Name = 'SettingsListFiller2',
-        Position = UDim2.new(0, 0, 0, 343),
-        Size = UDim2.new(0, 5, 0, 5),
+        Name = 'SettingsSlideOutHolderFiller2',
+        Position = UDim2.new(0, 20, 0, 0),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 20, 0, 20),
         BorderSizePixel = 0,
-        ZIndex = 2,
+        ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     }),
     UIFunctions:Create('Frame', {
-        Name = 'SettingsListFiller3',
-        Position = UDim2.new(0, 45, 0, 0),
-        Size = UDim2.new(0, 5, 0, 5),
+        Name = 'SettingsSlideOutHolderFiller3',
+        Position = UDim2.new(0, 20, 0, 20),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 20, 0, 20),
         BorderSizePixel = 0,
-        ZIndex = 2,
+        ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     }),
     UIFunctions:Create('Frame', {
-        Name = 'SettingsListLine1',
+        Name = 'SettingsSlideOutHolderLine1',
         Position = UDim2.new(0, -1, 0, 0),
-        Size = UDim2.new(0, 1, 0, 10),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 1, 0, 20),
         BorderSizePixel = 0,
-        ZIndex = 2,
+        ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(75, 75, 75)
     }),
     UIFunctions:Create('Frame', {
-        Name = 'SettingsListLine2',
-        Position = UDim2.new(0, -1, 0, 338),
-        Size = UDim2.new(0, 1, 0, 10),
+        Name = 'SettingsSlideOutHolderLine2',
+        Position = UDim2.new(0, 20, 0, 40),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 20, 0, 1),
         BorderSizePixel = 0,
-        ZIndex = 2,
+        ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(75, 75, 75)
-    }),
+    })
 })
 
 local RemoteList = RemoteSpy['RemoteList']
@@ -1256,10 +1291,205 @@ local CanvasSize = RemoteListLayout.AbsoluteContentSize
 
 RemoteList.CanvasSize = UDim2.new(0, CanvasSize.X, 0, CanvasSize.Y)
 
+-- // Remote Spy Functions
+local RemoteSpyFunctions = {}
 
+do
+    function RemoteSpyFunctions:CreateSettingsTab(Name, CreateObjects)
+        local Name = Name or 'Tab'
+        local Icon, RectOffset, RectSize
+
+        
+        if Name == 'Settings' then
+            Icon = 'rbxassetid://3926307971'
+            RectOffset = Vector2.new(323, 124)
+            RectSize = Vector2.new(36, 36)
+        end
+
+        UIFunctions:Create('Frame', {
+            Name = Name .. 'Tab',
+            Size = UDim2.new(0, 0, 0, 375),
+            BackgroundColor3 = Color3.fromRGB(35, 35, 35),
+            Parent = SettingsTabHolder,
+            AnchorPoint = Vector2.new(1, 0.5),
+	        Position = UDim2.new(1, 0, 0.5, 0),
+            ZIndex = 5,
+            Visible = false,
+            BackgroundTransparency = 0
+        }, {
+            UIFunctions:Create('UICorner', {
+                Name = Name .. 'TabCorner',
+                CornerRadius = UDim.new(0, 5)
+            }),
+            UIFunctions:Create('UIStroke', {
+                Name = 'SettingsTabStroke',
+                Color = Color3.fromRGB(75, 75, 75),
+                Thickness = 1
+            })
+        })
+
+        local Tab = SettingsTabHolder[Name .. 'Tab']
+
+        --[[
+        Button.MouseEnter:Connect(function()
+            UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
+        end)
+        
+        Button.MouseLeave:Connect(function()
+            UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+        end)
+    
+        Button.MouseButton1Click:Connect(function()
+            if Visual.ClickThrough then
+                Visual.ClickThrough = false
+                for _, Item in next, SettingsList:GetDescendants() do
+                    if Item:IsA('ImageButton') then
+                        UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                    end
+                end
+
+                Tab.Visible = true
+                UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                UIFunctions:Tween(Tab, {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
+                
+                task.wait(1)
+
+                CreateObjects()
+            end
+        end)
+        ]]
+    
+        return Tab
+    end
+end
+
+
+
+local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
+    local Topbar = UIFunctions:Create('Frame', {
+        Name = 'SettingsTab',
+        Size = UDim2.new(0, 650, 0, 30),
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        Parent = SettingsTabHolder,
+        ZIndex = 5,
+        Visible = true
+    }, {
+        UIFunctions:Create('Frame', {
+            Name = 'TopbarFiller1',
+            Position = UDim2.new(0, 0, 0, 25),
+            Parent = RemoteSpy,
+            Size = UDim2.new(0, 5, 0, 5),
+            BorderSizePixel = 0,
+            ZIndex = 5,
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        }),
+        UIFunctions:Create('Frame', {
+            Name = 'TopbarFiller2',
+            Position = UDim2.new(0, 645, 0, 25),
+            Parent = RemoteSpy,
+            Size = UDim2.new(0, 5, 0, 5),
+            BorderSizePixel = 0,
+            ZIndex = 5,
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        }),
+        UIFunctions:Create('Frame', {
+            Name = 'TopbarLine1',
+            Position = UDim2.new(0, 0, 0, 30),
+            Parent = RemoteSpy,
+            Size = UDim2.new(0, 10, 0, 1),
+            BorderSizePixel = 0,
+            ZIndex = 6,
+            BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+        }),
+        UIFunctions:Create('Frame', {
+            Name = 'TopbarLine2',
+            Position = UDim2.new(0, 640, 0, 30),
+            Parent = RemoteSpy,
+            Size = UDim2.new(0, 10, 0, 1),
+            BorderSizePixel = 0,
+            ZIndex = 6,
+            BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+        }),
+        UIFunctions:Create('UICorner', {
+            Name = 'SettingsTabCorner',
+            CornerRadius = UDim.new(0, 5)
+        }),
+        UIFunctions:Create('UIStroke', {
+            Name = 'SettingsTabStroke',
+            Color = Color3.fromRGB(75, 75, 75),
+            Thickness = 1
+        }),
+        UIFunctions:Create('ImageButton', {
+            Name = 'BackButton',
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 620, 0, 3),
+            BorderSizePixel = 0,
+            ImageColor3 = Color3.fromRGB(175, 175, 175),
+            Size = UDim2.new(0, 25, 0, 25),
+            Image = 'rbxassetid://3926307971',
+            AutoButtonColor = false,
+            ZIndex = 5,
+            ImageRectOffset = Vector2.new(884, 284),
+            ImageRectSize = Vector2.new(36, 36)
+        }),
+        UIFunctions:Create('TextLabel', {
+            Name = 'SettingsTitle',
+            Position = UDim2.new(0, 5, 0, 0),
+            Size = UDim2.new(0, 135, 0, 30),
+            BackgroundTransparency = 1,
+            TextColor3 = Color3.fromRGB(175, 175, 175),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            Font = Enum.Font.Gotham,
+            Text = 'Settings',
+            BorderSizePixel = 0,
+            TextSize = 16,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            ZIndex = 5,
+        }, {
+            UIFunctions:Create('UIPadding', {
+                Name = 'TabButtonTextPadding',
+                PaddingLeft = UDim.new(0, 0)
+            })
+        })
+    })
+end)
 
 -- // HTTP Spy
 
+-- // Loaded UI
+local Loaded = false
+local Elements = {}
 
+for _, Instance in next, Base:GetDescendants() do
+    if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') and not Instance:IsA('UIStroke') then
+        table.insert(Elements, Instance)
+    end
+end
+
+repeat task.wait()
+    local LoadedElements = {}
+
+    for _, Instance in next, Base:GetDescendants() do
+        if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') and not Instance:IsA('UIStroke') then
+            if Instance then
+                table.insert(LoadedElements, Instance)
+            end
+        end
+    end 
+
+    if #Elements == #LoadedElements then
+        Loaded = true
+    end
+until Loaded == true
+
+-- // Enable Dragging
+UIFunctions:EnableDragging(Base)
+
+-- // Animated Loading
+task.wait(0.25)
+
+Base.Visible = true
+UIFunctions:Tween(Base, {Size = UDim2.new(0, 650, 0, 375)}, 0.1)
 
 UtilityFunctions:Log('Log', 'Finished Loading UI')
