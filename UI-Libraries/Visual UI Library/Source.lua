@@ -1170,7 +1170,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                 BackgroundTransparency = 1,
                 TextTransparency = 1,
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, -25),
+                Position = UDim2.new(0.5, 0, 0.5, -40),
                 BorderSizePixel = 0,
                 Size = UDim2.new(0, 170, 0, 20),
                 Font = Enum.Font.Gotham,
@@ -1191,7 +1191,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                 ZIndex = 3,
                 Size = UDim2.new(0, 100, 0, 100),
                 Image = IntroIcon,
-                ScaleType = 'Fit'
+                ScaleType = Enum.ScaleType.Fit
             })
         }),
     })
