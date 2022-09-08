@@ -1202,18 +1202,50 @@ UIFunctions:Create('ScrollingFrame', {
 
 UIFunctions:Create('ScrollingFrame', {
     Name = 'GeneratedScriptHolder',
-    Active = true,
+    Parent = RemoteSpy,
     BackgroundColor3 = Color3.fromRGB(35, 35, 35),
     BorderSizePixel = 0,
-    Position = UDim2.new(0, 0, 0, 0),
+    Position = UDim2.new(0, 135, 0, 0),
     ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
-    Size = UDim2.new(0, 268, 0, 348),
+    Size = UDim2.new(0, 350, 0, 348),
+    ZIndex = 5,
     ScrollBarThickness = 1
+}, {
+    UIFunctions:Create('Frame', {
+        Name = 'LineAmount',
+        Size = UDim2.new(0, 35, 0, 348),
+        BackgroundColor3 = Color3.fromRGB(33, 33, 33),
+        Position = UDim2.new(0, 1, 0, 0),
+        Parent = RemoteSpy,
+        ZIndex = 5,
+        Visible = true,
+        BackgroundTransparency = 0
+    }, {
+        UIFunctions:Create('TextLabel', {
+            Name = 'SettingsTitle',
+            Position = UDim2.new(0, 5, 0, 0),
+            Size = UDim2.new(0, 27, 0, 30),
+            BackgroundTransparency = 1,
+            TextColor3 = Color3.fromRGB(175, 175, 175),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            Font = Enum.Font.Gotham,
+            Text = '1',
+            BorderSizePixel = 0,
+            TextSize = 16,
+            TextXAlignment = Enum.TextXAlignment.Right,
+            ZIndex = 5,
+        }),
+        UIFunctions:Create('UIStroke', {
+            Name = 'LineAmountStroke',
+            Color = Color3.fromRGB(75, 75, 75),
+            Thickness = 1
+        })
+    })
 })
 
 UIFunctions:Create('Frame', {
     Name = 'SettingsSlideOutHolder',
-    Size = UDim2.new(0, 40, 0, 40),
+    Size = UDim2.new(0, 30, 0, 60),
     BackgroundColor3 = Color3.fromRGB(30, 30, 30),
     Parent = RemoteSpy,
     AnchorPoint = Vector2.new(1, 0),
@@ -1235,25 +1267,25 @@ UIFunctions:Create('Frame', {
         Name = 'SettingsSlideOutHolderFiller1',
         Position = UDim2.new(0, 0, 0, 0),
         Parent = RemoteSpy,
-        Size = UDim2.new(0, 20, 0, 20),
+        Size = UDim2.new(0, 12, 0, 12),
         BorderSizePixel = 0,
         ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     }),
     UIFunctions:Create('Frame', {
         Name = 'SettingsSlideOutHolderFiller2',
-        Position = UDim2.new(0, 20, 0, 0),
+        Position = UDim2.new(0, 18, 0, 0),
         Parent = RemoteSpy,
-        Size = UDim2.new(0, 20, 0, 20),
+        Size = UDim2.new(0, 12, 0, 12),
         BorderSizePixel = 0,
         ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     }),
     UIFunctions:Create('Frame', {
         Name = 'SettingsSlideOutHolderFiller3',
-        Position = UDim2.new(0, 20, 0, 20),
+        Position = UDim2.new(0, 18, 0, 48),
         Parent = RemoteSpy,
-        Size = UDim2.new(0, 20, 0, 20),
+        Size = UDim2.new(0, 12, 0, 12),
         BorderSizePixel = 0,
         ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -1262,19 +1294,56 @@ UIFunctions:Create('Frame', {
         Name = 'SettingsSlideOutHolderLine1',
         Position = UDim2.new(0, -1, 0, 0),
         Parent = RemoteSpy,
-        Size = UDim2.new(0, 1, 0, 20),
+        Size = UDim2.new(0, 1, 0, 12),
         BorderSizePixel = 0,
         ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(75, 75, 75)
     }),
     UIFunctions:Create('Frame', {
         Name = 'SettingsSlideOutHolderLine2',
-        Position = UDim2.new(0, 20, 0, 40),
+        Position = UDim2.new(0, 18, 0, 60),
         Parent = RemoteSpy,
-        Size = UDim2.new(0, 20, 0, 1),
+        Size = UDim2.new(0, 12, 0, 1),
         BorderSizePixel = 0,
         ZIndex = 5,
         BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    }),
+    UIFunctions:Create('Frame', {
+        Name = 'SettingsSlideOutHolderLine1',
+        Position = UDim2.new(0, 0, 0, 30),
+        Parent = RemoteSpy,
+        Size = UDim2.new(0, 30, 0, 1),
+        BorderSizePixel = 0,
+        ZIndex = 5,
+        BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    }),
+    UIFunctions:Create('ImageButton', {
+        Name = 'SlideOutButton',
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ImageColor3 = Color3.fromRGB(175, 175, 175),
+        Size = UDim2.new(0, 25, 0, 25),
+        Image = 'rbxassetid://3926305904',
+        ZIndex = 5,
+        AnchorPoint = Vector2.new(0.5, 0.5),
+	    Position = UDim2.new(0.5, 1, 0.5, 15),
+        ImageRectOffset = Vector2.new(124, 924),
+        ImageRectSize = Vector2.new(36, 36)
+    }),
+    UIFunctions:Create('ImageButton', {
+        Name = 'SettingsButton',
+        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ImageColor3 = Color3.fromRGB(175, 175, 175),
+        Size = UDim2.new(0, 25, 0, 25),
+        ZIndex = 5,
+        AnchorPoint = Vector2.new(0.5, 0.5),
+	    Position = UDim2.new(0.5, 1, 0.5, -15),
+        Image = 'rbxassetid://3926307971',
+        ImageRectOffset = Vector2.new(324, 124),
+        ImageRectSize = Vector2.new(36, 36)
     })
 })
 
@@ -1313,7 +1382,7 @@ do
             Parent = SettingsTabHolder,
             AnchorPoint = Vector2.new(1, 0.5),
 	        Position = UDim2.new(1, 0, 0.5, 0),
-            ZIndex = 5,
+            ZIndex = 7,
             Visible = false,
             BackgroundTransparency = 0
         }, {
@@ -1328,51 +1397,50 @@ do
             })
         })
 
+        local SettingsSlideOutHolder = RemoteSpy['SettingsSlideOutHolder']
+        local SettingsButton = SettingsSlideOutHolder['SettingsButton']
         local Tab = SettingsTabHolder[Name .. 'Tab']
 
-        --[[
-        Button.MouseEnter:Connect(function()
-            UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
+        SettingsButton.MouseEnter:Connect(function()
+            UIFunctions:Tween(SettingsButton, {ImageColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
         end)
         
-        Button.MouseLeave:Connect(function()
-            UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+        SettingsButton.MouseLeave:Connect(function()
+            UIFunctions:Tween(SettingsButton, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
         end)
     
-        Button.MouseButton1Click:Connect(function()
+        SettingsButton.MouseButton1Click:Connect(function()
+            print('x')
             if Visual.ClickThrough then
                 Visual.ClickThrough = false
-                for _, Item in next, SettingsList:GetDescendants() do
+                for _, Item in next, SettingsSlideOutHolder:GetDescendants() do
                     if Item:IsA('ImageButton') then
-                        UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                        UIFunctions:Tween(SettingsButton, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
                     end
                 end
 
                 Tab.Visible = true
-                UIFunctions:Tween(Button, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                UIFunctions:Tween(SettingsButton, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
                 UIFunctions:Tween(Tab, {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
                 
-                task.wait(1)
+                task.wait(0.25)
 
                 CreateObjects()
             end
         end)
-        ]]
     
         return Tab
     end
 end
 
-
-
-local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
+local SettingsTab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
     local Topbar = UIFunctions:Create('Frame', {
         Name = 'SettingsTab',
         Size = UDim2.new(0, 650, 0, 30),
         BackgroundColor3 = Color3.fromRGB(30, 30, 30),
         Parent = SettingsTabHolder,
-        ZIndex = 5,
-        Visible = true
+        ZIndex = 7,
+        Visible = true,
     }, {
         UIFunctions:Create('Frame', {
             Name = 'TopbarFiller1',
@@ -1380,7 +1448,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             Parent = RemoteSpy,
             Size = UDim2.new(0, 5, 0, 5),
             BorderSizePixel = 0,
-            ZIndex = 5,
+            ZIndex = 7,
             BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         }),
         UIFunctions:Create('Frame', {
@@ -1389,7 +1457,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             Parent = RemoteSpy,
             Size = UDim2.new(0, 5, 0, 5),
             BorderSizePixel = 0,
-            ZIndex = 5,
+            ZIndex = 7,
             BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         }),
         UIFunctions:Create('Frame', {
@@ -1398,7 +1466,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             Parent = RemoteSpy,
             Size = UDim2.new(0, 10, 0, 1),
             BorderSizePixel = 0,
-            ZIndex = 6,
+            ZIndex = 7,
             BackgroundColor3 = Color3.fromRGB(75, 75, 75)
         }),
         UIFunctions:Create('Frame', {
@@ -1407,7 +1475,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             Parent = RemoteSpy,
             Size = UDim2.new(0, 10, 0, 1),
             BorderSizePixel = 0,
-            ZIndex = 6,
+            ZIndex = 7,
             BackgroundColor3 = Color3.fromRGB(75, 75, 75)
         }),
         UIFunctions:Create('UICorner', {
@@ -1429,7 +1497,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             Size = UDim2.new(0, 25, 0, 25),
             Image = 'rbxassetid://3926307971',
             AutoButtonColor = false,
-            ZIndex = 5,
+            ZIndex = 7,
             ImageRectOffset = Vector2.new(884, 284),
             ImageRectSize = Vector2.new(36, 36)
         }),
@@ -1445,7 +1513,7 @@ local Tab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
             BorderSizePixel = 0,
             TextSize = 16,
             TextXAlignment = Enum.TextXAlignment.Left,
-            ZIndex = 5,
+            ZIndex = 7,
         }, {
             UIFunctions:Create('UIPadding', {
                 Name = 'TabButtonTextPadding',
