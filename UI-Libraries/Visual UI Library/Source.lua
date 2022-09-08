@@ -1208,7 +1208,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
     Utility:Tween(Main['IntroText'], {TextTransparency = 0}, 0.25)
     task.wait(0.5)
     Utility:Tween(Main['IntroImage'], {ImageTransparency = 0}, 0.25)
-    task.wait(99)
+    task.wait(3)
     Utility:Tween(Main['IntroText'], {TextTransparency = 1}, 0.25)
     task.wait(0.5)
     Utility:Tween(Main['IntroImage'], {ImageTransparency = 1}, 0.25)
