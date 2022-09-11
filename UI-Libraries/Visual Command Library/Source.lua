@@ -155,7 +155,7 @@ function Library:CreateWindow(Properties)
     local IntroText = Utility:GetProperty('Window', 'IntroText', Properties) or 'Visual Command Library'
     local IntroIcon = Utility:GetProperty('Window', 'IntroIcon', Properties) or 'rbxassetid://10618644218'
     local ConfigFolder = Utility:GetProperty('Window', 'ConfigFolder', Properties) or 'Visual Command Library Configs'
-    local Theme = Utility:GetProperty('Window', 'Theme', Properties) or Library.Themes.Default
+    local Theme = Utility:GetProperty('Window', 'Theme', Properties) or Library.Themes.Dark
     local Position = string.lower(Utility:GetProperty('Window', 'Position', Properties)) or 'top'
     local BlurWhenVisible = Utility:GetProperty('Window', 'BlurWhenVisible', Properties) or true
     local Draggable = Utility:GetProperty('Window', 'Draggable', Properties) or false
@@ -164,4 +164,20 @@ function Library:CreateWindow(Properties)
     local Prefix = Utility:GetProperty('Window', 'Prefix', Properties) or '.'
 end
 
-Library:CreateWindow({Name = 'x'})
+
+
+
+-- // Example
+local Window = Library:CreateWindow({
+    Name = 'Visual Command Library',
+    IntroText = 'Visual Command Library',
+    IntroIcon = 'rbxassetid://10618644218',
+    ConfigFolder = 'Visual Command Library Configs',
+    Theme = Library.Themes.Dark,
+    Position = 'Center',
+    BlurWhenVisible = true,
+    Draggable = false,
+    DefaultVisibility = false,
+    ToggleKey = 'RightCtrl',
+    Prefix = '.'
+})
