@@ -26,6 +26,14 @@ do
         end
     end
 
+    function UtilityFunctions:HasProperty(Instance, Property)
+        local Success = pcall(function()
+            return Instance[Property]
+        end)
+        
+        return Success and not Instance:FindFirstChild(Property)
+    end
+
     function UtilityFunctions:HasMethods(Name)
         local CurrentIndex = 0
         local Methods = {
@@ -76,7 +84,7 @@ do
                     end
                 end
     
-                UIFunctions:Tween(UI.Base, {Size = UDim2.new(0, 0, 0, 0)}, 0.25)
+                UIFunctions:Tween(UI.Base, {Size = UDim2.new(0, 650, 0, 0)}, 0.25)
                 task.wait(0.25)
     
                 UI:Destroy()
@@ -115,6 +123,13 @@ do
             UIFunctions:Tween(OpenButton, {BackgroundTransparency = 0}, 0.25)
             UIFunctions:Tween(OpenButton, {ImageTransparency = 0}, 0.25)
             OpenButton.OpenButtonBaseStroke.Thickness = 1
+            for _, Instance in next, Base:GetChildren() do
+                if UtilityFunctions:HasProperty(Instance, 'Visible') then
+                    Instance.Visible = false
+                end
+            end
+            UIFunctions:Tween(Base, {Size = UDim2.new(0, 650, 0, 0)}, 0.25)
+            task.wait(0.25)
             Base.Visible = false
         else
             local Base = CoreGui:FindFirstChild('VisualSpy').Base
@@ -123,6 +138,12 @@ do
             UIFunctions:Tween(OpenButton, {ImageTransparency = 1}, 0.25)
             OpenButton.OpenButtonBaseStroke.Thickness = 0
             Base.Visible = true
+            UIFunctions:Tween(Base, {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
+            for _, Instance in next, Base:GetChildren() do
+                if UtilityFunctions:HasProperty(Instance, 'Visible') then
+                    Instance.Visible = true
+                end
+            end
             OpenButton.Visible = false
         end
     end
@@ -758,6 +779,19 @@ local Container = UIFunctions:Create('ScreenGui', {
     })
 })
 
+
+-- // Enable Dragging
+UIFunctions:EnableDragging(Container['Base'])
+
+-- // Animated Loading
+Container['Base'].Visible = true
+Container['Base'].Size = UDim2.new(0, 650, 0, 0)
+
+
+UIFunctions:Tween(Container['Base'], {Size = UDim2.new(0, 650, 0, 375)}, 0.25)
+
+task.wait(0.1)
+
 -- // Topbar
 UIFunctions:Create('Frame', {
     Name = 'Topbar',
@@ -1011,8 +1045,6 @@ OpenButton.MouseButton1Click:Connect(function()
 end)
 
 -- // Tab Functions
-local DebounceAmount = 0.25
-local Debounce = false
 local function CreateTab(Name, IsVisible)
     local Name = Name or 'Tab'
     local IsVisible = IsVisible or false
@@ -1099,7 +1131,6 @@ local function CreateTab(Name, IsVisible)
             })
         })
     })
-    
 
     local Tab = TabHolderFolder[Name .. 'Tab']
     local TabButtonFrame = SidebarScrolling[Name .. 'TabButtonFrame']
@@ -1133,33 +1164,24 @@ local function CreateTab(Name, IsVisible)
     end)
 
     TabButton.MouseButton1Click:Connect(function()
-        print(Visual.ClickThrough)
         if Visual.ClickThrough then
             local HasMethods = UtilityFunctions:HasMethods(Name)
             if HasMethods then
-                if not Debounce then
-                    task.spawn(function()
-                        Debounce = true
-                        task.wait(DebounceAmount)
-                        Debounce = false
-                    end)
-
-                    for _, OtherTab in next, TabHolderFolder:GetChildren() do
-                        OtherTab.Visible = false
-                    end
-
-                    for _, Item in next, SidebarScrolling:GetDescendants() do
-                        if Item:IsA('TextLabel') then
-                            UIFunctions:Tween(Item, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
-                        elseif Item:IsA('ImageLabel') then
-                            UIFunctions:Tween(Item, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
-                        end
-                    end
-
-                    UIFunctions:Tween(TabLabel, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
-                    UIFunctions:Tween(TabIcon, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
-                    Tab.Visible = true
+                for _, OtherTab in next, TabHolderFolder:GetChildren() do
+                    OtherTab.Visible = false
                 end
+
+                for _, Item in next, SidebarScrolling:GetDescendants() do
+                    if Item:IsA('TextLabel') then
+                        UIFunctions:Tween(Item, {TextColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                    elseif Item:IsA('ImageLabel') then
+                        UIFunctions:Tween(Item, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+                    end
+                end
+
+                UIFunctions:Tween(TabLabel, {TextColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                UIFunctions:Tween(TabIcon, {ImageColor3 = Color3.fromRGB(0, 150, 255)}, 0.25)
+                Tab.Visible = true
             else
                 UIFunctions:CreatePrompt('Text', 'Warning', 'Your exploit is not supported.', 'Alright')
             end
@@ -1205,9 +1227,9 @@ UIFunctions:Create('ScrollingFrame', {
     Parent = RemoteSpy,
     BackgroundColor3 = Color3.fromRGB(35, 35, 35),
     BorderSizePixel = 0,
-    Position = UDim2.new(0, 135, 0, 0),
+    Position = UDim2.new(0, 136, 0, 0),
     ScrollBarImageColor3 = Color3.fromRGB(75, 75, 75),
-    Size = UDim2.new(0, 350, 0, 348),
+    Size = UDim2.new(0, 348, 0, 348),
     ZIndex = 5,
     ScrollBarThickness = 1
 }, {
@@ -1215,14 +1237,13 @@ UIFunctions:Create('ScrollingFrame', {
         Name = 'LineAmount',
         Size = UDim2.new(0, 35, 0, 348),
         BackgroundColor3 = Color3.fromRGB(33, 33, 33),
-        Position = UDim2.new(0, 1, 0, 0),
-        Parent = RemoteSpy,
+        Position = UDim2.new(0, 0, 0, 0),
         ZIndex = 5,
         Visible = true,
         BackgroundTransparency = 0
     }, {
         UIFunctions:Create('TextLabel', {
-            Name = 'SettingsTitle',
+            Name = 'LineText',
             Position = UDim2.new(0, 5, 0, 0),
             Size = UDim2.new(0, 27, 0, 30),
             BackgroundTransparency = 1,
@@ -1350,6 +1371,8 @@ UIFunctions:Create('Frame', {
 local RemoteList = RemoteSpy['RemoteList']
 local RemoteListLayout = RemoteList['RemoteListLayout']
 
+local SettingsChildrenCreated = false
+
 RemoteList.ChildAdded:Connect(function()
     local CanvasSize = RemoteListLayout.AbsoluteContentSize
 
@@ -1410,9 +1433,9 @@ do
         end)
     
         SettingsButton.MouseButton1Click:Connect(function()
-            print('x')
             if Visual.ClickThrough then
                 Visual.ClickThrough = false
+                
                 for _, Item in next, SettingsSlideOutHolder:GetDescendants() do
                     if Item:IsA('ImageButton') then
                         UIFunctions:Tween(SettingsButton, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
@@ -1434,93 +1457,196 @@ do
 end
 
 local SettingsTab = RemoteSpyFunctions:CreateSettingsTab('Settings', function()
-    local Topbar = UIFunctions:Create('Frame', {
-        Name = 'SettingsTab',
-        Size = UDim2.new(0, 650, 0, 30),
-        BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-        Parent = SettingsTabHolder,
-        ZIndex = 7,
-        Visible = true,
-    }, {
+    if not SettingsChildrenCreated then
         UIFunctions:Create('Frame', {
-            Name = 'TopbarFiller1',
-            Position = UDim2.new(0, 0, 0, 25),
-            Parent = RemoteSpy,
-            Size = UDim2.new(0, 5, 0, 5),
-            BorderSizePixel = 0,
-            ZIndex = 7,
-            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        }),
-        UIFunctions:Create('Frame', {
-            Name = 'TopbarFiller2',
-            Position = UDim2.new(0, 645, 0, 25),
-            Parent = RemoteSpy,
-            Size = UDim2.new(0, 5, 0, 5),
-            BorderSizePixel = 0,
-            ZIndex = 7,
-            BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        }),
-        UIFunctions:Create('Frame', {
-            Name = 'TopbarLine1',
-            Position = UDim2.new(0, 0, 0, 30),
-            Parent = RemoteSpy,
-            Size = UDim2.new(0, 10, 0, 1),
-            BorderSizePixel = 0,
-            ZIndex = 7,
-            BackgroundColor3 = Color3.fromRGB(75, 75, 75)
-        }),
-        UIFunctions:Create('Frame', {
-            Name = 'TopbarLine2',
-            Position = UDim2.new(0, 640, 0, 30),
-            Parent = RemoteSpy,
-            Size = UDim2.new(0, 10, 0, 1),
-            BorderSizePixel = 0,
-            ZIndex = 7,
-            BackgroundColor3 = Color3.fromRGB(75, 75, 75)
-        }),
-        UIFunctions:Create('UICorner', {
-            Name = 'SettingsTabCorner',
-            CornerRadius = UDim.new(0, 5)
-        }),
-        UIFunctions:Create('UIStroke', {
-            Name = 'SettingsTabStroke',
-            Color = Color3.fromRGB(75, 75, 75),
-            Thickness = 1
-        }),
-        UIFunctions:Create('ImageButton', {
-            Name = 'BackButton',
+            Name = 'Topbar',
+            Size = UDim2.new(0, 650, 0, 30),
             BackgroundColor3 = Color3.fromRGB(30, 30, 30),
             BackgroundTransparency = 1,
-            Position = UDim2.new(0, 620, 0, 3),
-            BorderSizePixel = 0,
-            ImageColor3 = Color3.fromRGB(175, 175, 175),
-            Size = UDim2.new(0, 25, 0, 25),
-            Image = 'rbxassetid://3926307971',
-            AutoButtonColor = false,
+            Parent = SettingsTabHolder['SettingsTab'],
             ZIndex = 7,
-            ImageRectOffset = Vector2.new(884, 284),
-            ImageRectSize = Vector2.new(36, 36)
-        }),
-        UIFunctions:Create('TextLabel', {
-            Name = 'SettingsTitle',
-            Position = UDim2.new(0, 5, 0, 0),
-            Size = UDim2.new(0, 135, 0, 30),
-            BackgroundTransparency = 1,
-            TextColor3 = Color3.fromRGB(175, 175, 175),
-            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-            Font = Enum.Font.Gotham,
-            Text = 'Settings',
-            BorderSizePixel = 0,
-            TextSize = 16,
-            TextXAlignment = Enum.TextXAlignment.Left,
-            ZIndex = 7,
+            Visible = true,
         }, {
-            UIFunctions:Create('UIPadding', {
-                Name = 'TabButtonTextPadding',
-                PaddingLeft = UDim.new(0, 0)
+            UIFunctions:Create('Frame', {
+                Name = 'TopbarFiller1',
+                Position = UDim2.new(0, 0, 0, 25),
+                Size = UDim2.new(0, 5, 0, 5),
+                BorderSizePixel = 0,
+                BackgroundTransparency = 1,
+                ZIndex = 7,
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            }),
+            UIFunctions:Create('Frame', {
+                Name = 'TopbarFiller2',
+                Position = UDim2.new(0, 645, 0, 25),
+                Size = UDim2.new(0, 5, 0, 5),
+                BorderSizePixel = 0,
+                BackgroundTransparency = 1,
+                ZIndex = 7,
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            }),
+            UIFunctions:Create('Frame', {
+                Name = 'TopbarLine1',
+                Position = UDim2.new(0, 0, 0, 30),
+                Size = UDim2.new(0, 10, 0, 1),
+                BorderSizePixel = 0,
+                BackgroundTransparency = 1,
+                ZIndex = 7,
+                BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+            }),
+            UIFunctions:Create('Frame', {
+                Name = 'TopbarLine2',
+                Position = UDim2.new(0, 640, 0, 30),
+                Size = UDim2.new(0, 10, 0, 1),
+                BorderSizePixel = 0,
+                BackgroundTransparency = 1,
+                ZIndex = 7,
+                BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+            }),
+            UIFunctions:Create('UICorner', {
+                Name = 'SettingsTabCorner',
+                CornerRadius = UDim.new(0, 5)
+            }),
+            UIFunctions:Create('UIStroke', {
+                Name = 'SettingsTabStroke',
+                Color = Color3.fromRGB(75, 75, 75),
+                Thickness = 1
+            }),
+            UIFunctions:Create('ImageButton', {
+                Name = 'BackButton',
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+                Position = UDim2.new(0, 620, 0, 3),
+                BorderSizePixel = 0,
+                ImageColor3 = Color3.fromRGB(175, 175, 175),
+                Size = UDim2.new(0, 25, 0, 25),
+                BackgroundTransparency = 1,
+                ImageTransparency = 1,
+                Image = 'rbxassetid://3926307971',
+                AutoButtonColor = false,
+                ZIndex = 7,
+                ImageRectOffset = Vector2.new(884, 284),
+                ImageRectSize = Vector2.new(36, 36)
+            }),
+            UIFunctions:Create('TextLabel', {
+                Name = 'SettingsTitle',
+                Position = UDim2.new(0, 5, 0, 0),
+                Size = UDim2.new(0, 135, 0, 30),
+                TextColor3 = Color3.fromRGB(175, 175, 175),
+                BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+                Font = Enum.Font.Gotham,
+                BackgroundTransparency = 1,
+                TextTransparency = 1,
+                Text = 'Settings',
+                BorderSizePixel = 0,
+                TextSize = 16,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                ZIndex = 7,
+            }, {
+                UIFunctions:Create('UIPadding', {
+                    Name = 'TabButtonTextPadding',
+                    PaddingLeft = UDim.new(0, 0)
+                })
             })
         })
-    })
+    end
+
+    SettingsChildrenCreated = true
+
+    local Tab = SettingsTabHolder['SettingsTab']
+    local Topbar = Tab['Topbar']
+    local BackButton = Topbar['BackButton']
+
+    -- // Animate Tab Children
+    task.wait(0.25)
+    for _, Instance in next, Tab:GetDescendants() do
+        if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') then
+            local HasBackgroundTransparency = UtilityFunctions:HasProperty(Instance, 'BackgroundTransparency')
+            local HasTextTransparency = UtilityFunctions:HasProperty(Instance, 'TextTransparency')
+            local HasImageTransparency = UtilityFunctions:HasProperty(Instance, 'ImageTransparency')
+            local HasThickness = UtilityFunctions:HasProperty(Instance, 'Thickness')
+
+            if HasBackgroundTransparency then
+                UIFunctions:Tween(Instance, {BackgroundTransparency = 0}, 0.25)
+            end
+            
+            if HasTextTransparency then
+                UIFunctions:Tween(Instance, {TextTransparency = 0}, 0.25)
+            end
+
+            if HasImageTransparency then
+                UIFunctions:Tween(Instance, {ImageTransparency = 0}, 0.25)
+            end
+
+            if HasThickness then
+                Instance.Thickness = 1
+            end
+        end
+    end
+
+    -- // Animate Back Button
+    BackButton.MouseEnter:Connect(function()
+        UIFunctions:Tween(BackButton, {ImageColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
+    end)
+    
+    BackButton.MouseLeave:Connect(function()
+        UIFunctions:Tween(BackButton, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+    end)
+
+    BackButton.MouseButton1Click:Connect(function()
+        UIFunctions:Tween(BackButton, {ImageColor3 = Color3.fromRGB(200, 200, 200)}, 0.25)
+
+        task.wait(0.25)
+
+        for _, Instance in next, Tab:GetDescendants() do
+            if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') then
+                local HasBackgroundTransparency = UtilityFunctions:HasProperty(Instance, 'BackgroundTransparency')
+                local HasTextTransparency = UtilityFunctions:HasProperty(Instance, 'TextTransparency')
+                local HasImageTransparency = UtilityFunctions:HasProperty(Instance, 'ImageTransparency')
+                local HasThickness = UtilityFunctions:HasProperty(Instance, 'Thickness')
+
+                if HasBackgroundTransparency then
+                    UIFunctions:Tween(Instance, {BackgroundTransparency = 1}, 0.25)
+                end
+                
+                if HasTextTransparency then
+                    UIFunctions:Tween(Instance, {TextTransparency = 1}, 0.25)
+                end
+
+                if HasImageTransparency then
+                    UIFunctions:Tween(Instance, {ImageTransparency = 1}, 0.25)
+                end
+
+                if HasThickness then
+                    Instance.Thickness = 0
+                end
+            end
+        end
+
+        task.wait(0.25)
+
+        UIFunctions:Tween(Tab, {Size = UDim2.new(0, 0, 0, 375)}, 0.25)
+
+        task.wait(0.25)
+
+        Tab.Visible = false
+
+        UIFunctions:Tween(BackButton, {ImageColor3 = Color3.fromRGB(175, 175, 175)}, 0.25)
+
+        Visual.ClickThrough = true
+    end)
+end)
+
+-- // Code Box
+local GeneratedScriptHolder = RemoteSpy['GeneratedScriptHolder']
+local LineAmount = GeneratedScriptHolder['LineAmount']
+local LineText = LineAmount['LineText']
+
+LineAmount.Size = UDim2.new(0, 35, 0, GeneratedScriptHolder.AbsoluteCanvasSize.Y)
+
+GeneratedScriptHolder.Changed:Connect(function(Property)
+    if Property == 'Size' then
+        LineAmount.Size = UDim2.new(0, 35, 0, GeneratedScriptHolder.AbsoluteCanvasSize.Y)
+    end
 end)
 
 -- // HTTP Spy
@@ -1550,14 +1676,5 @@ repeat task.wait()
         Loaded = true
     end
 until Loaded == true
-
--- // Enable Dragging
-UIFunctions:EnableDragging(Base)
-
--- // Animated Loading
-task.wait(0.25)
-
-Base.Visible = true
-UIFunctions:Tween(Base, {Size = UDim2.new(0, 650, 0, 375)}, 0.1)
 
 UtilityFunctions:Log('Log', 'Finished Loading UI')
