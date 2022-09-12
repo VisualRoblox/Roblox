@@ -174,6 +174,39 @@ do
     
                 Utility:Tween(UI.Main, {Size = UDim2.new(0, 500, 0, 0)}, 0.25)
 
+                if UI.SettingsTab.Visible then
+                    local Tab = UI.SettingsTab
+
+                    for _, Instance in next, Tab:GetDescendants() do
+                        if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') then
+                            local HasBackgroundTransparency = Utility:HasProperty(Instance, 'BackgroundTransparency')
+                            local HasTextTransparency = Utility:HasProperty(Instance, 'TextTransparency')
+                            local HasImageTransparency = Utility:HasProperty(Instance, 'ImageTransparency')
+                            local HasThickness = Utility:HasProperty(Instance, 'Thickness')
+            
+                            if HasBackgroundTransparency then
+                                Utility:Tween(Instance, {BackgroundTransparency = 1}, 0.25)
+                            end
+                            
+                            if HasTextTransparency then
+                                Utility:Tween(Instance, {TextTransparency = 1}, 0.25)
+                            end
+            
+                            if HasImageTransparency then
+                                Utility:Tween(Instance, {ImageTransparency = 1}, 0.25)
+                            end
+            
+                            if HasThickness then
+                                Instance.Thickness = 0
+                            end
+                        end
+                    end
+            
+                    task.wait(0.5)
+            
+                    Utility:Tween(Tab, {Size = UDim2.new(0, 0, 0, 300)}, 0.25)
+                end
+
                 task.wait(0.25)
 
                 UI:Destroy()
@@ -651,6 +684,227 @@ function Library:CreateWindow(Properties)
         Utility:Tween(SettingsButton, {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
     end)
 
+    -- // Main Button Callbacks
+    CloseButton.MouseButton1Down:Connect(function()
+        Utility:Tween(CloseButton, {TextColor3 = Utility:Darken(Theme.PrimaryTextColor)}, 0.25)
+
+        task.wait(0.25)
+
+        Utility:Tween(CloseButton, {TextColor3 = Theme.PrimaryTextColor}, 0.25)
+
+        task.wait(0.25)
+
+        Utility:Destroy()
+    end)
+
+    local SettingsChildrenCreated = false
+    SettingsButton.MouseButton1Down:Connect(function()
+        if not SettingsChildrenCreated then
+            -- // Create Elements
+            Utility:Create('Frame', {
+                Name = 'SettingsTab',
+                Size = UDim2.new(0, 0, 0, 300),
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
+                BackgroundColor3 = Theme.BackgroundColor,
+                BackgroundTransparency = 0,
+                Parent = Container,
+                ZIndex = 6,
+                Visible = true,
+            }, {
+                Utility:Create('UICorner', {
+                    Name = 'SettingsTabCorner',
+                    CornerRadius = UDim.new(0, 5)
+                }),
+                Utility:Create('UIStroke', {
+                    Name = 'SettingsTabStroke',
+                    Color = Theme.AccentColor,
+                    Thickness = 1
+                }),
+                Utility:Create('Frame', {
+                    Name = 'Topbar',
+                    Size = UDim2.new(0, 500, 0, 30),
+                    BackgroundColor3 = Theme.BackgroundColor,
+                    BackgroundTransparency = 1,
+                    ZIndex = 7,
+                    Visible = true,
+                }, {
+                    Utility:Create('UICorner', {
+                        Name = 'TopbarCorner',
+                        CornerRadius = UDim.new(0, 5)
+                    }),
+                    Utility:Create('UIStroke', {
+                        Name = 'TopbarStroke',
+                        Color = Theme.AccentColor,
+                        Thickness = 1
+                    }),
+                    Utility:Create('Frame', {
+                        Name = 'TopbarFiller1',
+                        Position = UDim2.new(0, 0, 0, 25),
+                        Size = UDim2.new(0, 5, 0, 5),
+                        BorderSizePixel = 0,
+                        BackgroundTransparency = 1,
+                        ZIndex = 7,
+                        BackgroundColor3 = Theme.BackgroundColor
+                    }),
+                    Utility:Create('Frame', {
+                        Name = 'TopbarFiller2',
+                        Position = UDim2.new(0, 495, 0, 25),
+                        Size = UDim2.new(0, 5, 0, 5),
+                        BorderSizePixel = 0,
+                        BackgroundTransparency = 1,
+                        ZIndex = 7,
+                        BackgroundColor3 = Theme.BackgroundColor
+                    }),
+                    Utility:Create('Frame', {
+                        Name = 'TopbarLine1',
+                        Position = UDim2.new(0, 0, 0, 30),
+                        Size = UDim2.new(0, 10, 0, 1),
+                        BorderSizePixel = 0,
+                        BackgroundTransparency = 1,
+                        ZIndex = 7,
+                        BackgroundColor3 = Theme.AccentColor
+                    }),
+                    Utility:Create('Frame', {
+                        Name = 'TopbarLine2',
+                        Position = UDim2.new(0, 495, 0, 30),
+                        Size = UDim2.new(0, 5, 0, 1),
+                        BorderSizePixel = 0,
+                        BackgroundTransparency = 1,
+                        ZIndex = 7,
+                        BackgroundColor3 = Theme.AccentColor
+                    }),
+                    Utility:Create('ImageButton', {
+                        Name = 'BackButton',
+                        BackgroundColor3 = Theme.BackgroundColor,
+                        Position = UDim2.new(0, 470, 0, 3),
+                        BorderSizePixel = 0,
+                        ImageColor3 = Theme.PrimaryTextColor,
+                        Size = UDim2.new(0, 25, 0, 25),
+                        BackgroundTransparency = 1,
+                        ImageTransparency = 1,
+                        Image = 'rbxassetid://3926307971',
+                        AutoButtonColor = false,
+                        ZIndex = 7,
+                        ImageRectOffset = Vector2.new(884, 284),
+                        ImageRectSize = Vector2.new(36, 36)
+                    }),
+                    Utility:Create('TextLabel', {
+                        Name = 'SettingsTitle',
+                        Position = UDim2.new(0, 5, 0, 0),
+                        Size = UDim2.new(0, 135, 0, 30),
+                        TextColor3 = Theme.PrimaryTextColor,
+                        BackgroundColor3 = Theme.BackgroundColor,
+                        Font = Enum.Font.Gotham,
+                        BackgroundTransparency = 1,
+                        TextTransparency = 1,
+                        Text = 'Settings',
+                        BorderSizePixel = 0,
+                        TextSize = 16,
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        ZIndex = 7,
+                    }, {
+                        Utility:Create('UIPadding', {
+                            Name = 'TabButtonTextPadding',
+                            PaddingLeft = UDim.new(0, 0)
+                        })
+                    })
+                })
+            })
+        end
+    
+        SettingsChildrenCreated = true
+    
+        local Tab = Container['SettingsTab']
+        local Topbar = Tab['Topbar']
+        local BackButton = Topbar['BackButton']
+
+        -- // Dragging
+        Utility:EnableDragging(Tab)
+        
+        -- // Animate Size
+        Tab.Visible = true
+
+        Utility:Tween(Tab, {Size = UDim2.new(0, 500, 0, 300)}, 0.25)
+
+        -- // Animate Tab Children
+        task.wait(0.5)
+        for _, Instance in next, Tab:GetDescendants() do
+            if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') then
+                local HasBackgroundTransparency = Utility:HasProperty(Instance, 'BackgroundTransparency')
+                local HasTextTransparency = Utility:HasProperty(Instance, 'TextTransparency')
+                local HasImageTransparency = Utility:HasProperty(Instance, 'ImageTransparency')
+                local HasThickness = Utility:HasProperty(Instance, 'Thickness')
+    
+                if HasBackgroundTransparency then
+                    Utility:Tween(Instance, {BackgroundTransparency = 0}, 0.25)
+                end
+                
+                if HasTextTransparency then
+                    Utility:Tween(Instance, {TextTransparency = 0}, 0.25)
+                end
+    
+                if HasImageTransparency then
+                    Utility:Tween(Instance, {ImageTransparency = 0}, 0.25)
+                end
+    
+                if HasThickness then
+                    Instance.Thickness = 1
+                end
+            end
+        end
+    
+        -- // Animate Back Button
+        BackButton.MouseEnter:Connect(function()
+            Utility:Tween(BackButton, {ImageColor3 = Utility:Darken(Theme.PrimaryTextColor)}, 0.25)
+        end)
+        
+        BackButton.MouseLeave:Connect(function()
+            Utility:Tween(BackButton, {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
+        end)
+    
+        BackButton.MouseButton1Click:Connect(function()
+            Utility:Tween(BackButton, {ImageColor3 = Utility:Darken(Theme.PrimaryTextColor)}, 0.25)
+    
+            task.wait(0.25)
+    
+            for _, Instance in next, Tab:GetDescendants() do
+                if not Instance:IsA('UICorner') and not Instance:IsA('UIPadding') then
+                    local HasBackgroundTransparency = Utility:HasProperty(Instance, 'BackgroundTransparency')
+                    local HasTextTransparency = Utility:HasProperty(Instance, 'TextTransparency')
+                    local HasImageTransparency = Utility:HasProperty(Instance, 'ImageTransparency')
+                    local HasThickness = Utility:HasProperty(Instance, 'Thickness')
+    
+                    if HasBackgroundTransparency then
+                        Utility:Tween(Instance, {BackgroundTransparency = 1}, 0.25)
+                    end
+                    
+                    if HasTextTransparency then
+                        Utility:Tween(Instance, {TextTransparency = 1}, 0.25)
+                    end
+    
+                    if HasImageTransparency then
+                        Utility:Tween(Instance, {ImageTransparency = 1}, 0.25)
+                    end
+    
+                    if HasThickness then
+                        Instance.Thickness = 0
+                    end
+                end
+            end
+    
+            task.wait(0.5)
+    
+            Utility:Tween(Tab, {Size = UDim2.new(0, 0, 0, 300)}, 0.25)
+    
+            task.wait(0.25)
+    
+            Tab.Visible = false
+    
+            Utility:Tween(BackButton, {ImageColor3 = Theme.PrimaryTextColor}, 0.25)
+        end)
+    end)
+
     -- // Main Hover
     local HoverDebounce = false
 
@@ -685,7 +939,7 @@ local Window = Library:CreateWindow({
     IntroIcon = 'rbxassetid://10618644218',
     ConfigFolder = 'Visual Command UI Library Configs',
     Theme = Library.Themes.Dark,
-    Position = 'Bottom',
+    Position = 'Top',
     Draggable = true,
     Prefix = '.'
 })
