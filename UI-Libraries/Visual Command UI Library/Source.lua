@@ -146,15 +146,22 @@ end
 
 -- // Library Defaults
 Library.Transparency = 0
-Library.Themes = {}
+Library.Themes = {
+    Dark = {
+        BackgroundColor = Color3.fromRGB(30, 30, 30),
+        AccentColor = Color3.fromRGB(0, 150, 255),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(175, 175, 175)
+    }
+}
 Library.Toggled = false
 
 -- // CreateWindow - Name, IntroText, IntroIcon, ConfigFolder, Theme, Position, BlurWhenVisible, Draggable, DefaultVisibility, ToggleKey, Prefix
 function Library:CreateWindow(Properties)
-    local Name = Utility:GetProperty('Window', 'Name', Properties) or 'Visual Command Library'
-    local IntroText = Utility:GetProperty('Window', 'IntroText', Properties) or 'Visual Command Library'
+    local Name = Utility:GetProperty('Window', 'Name', Properties) or 'Visual Command UI Library'
+    local IntroText = Utility:GetProperty('Window', 'IntroText', Properties) or 'Visual Command UI Library'
     local IntroIcon = Utility:GetProperty('Window', 'IntroIcon', Properties) or 'rbxassetid://10618644218'
-    local ConfigFolder = Utility:GetProperty('Window', 'ConfigFolder', Properties) or 'Visual Command Library Configs'
+    local ConfigFolder = Utility:GetProperty('Window', 'ConfigFolder', Properties) or 'Visual Command UI Library Configs'
     local Theme = Utility:GetProperty('Window', 'Theme', Properties) or Library.Themes.Dark
     local Position = string.lower(Utility:GetProperty('Window', 'Position', Properties)) or 'top'
     local BlurWhenVisible = Utility:GetProperty('Window', 'BlurWhenVisible', Properties) or true
@@ -169,10 +176,10 @@ end
 
 -- // Example
 local Window = Library:CreateWindow({
-    Name = 'Visual Command Library',
-    IntroText = 'Visual Command Library',
+    Name = 'Visual Command UI Library',
+    IntroText = 'Visual Command UI Library',
     IntroIcon = 'rbxassetid://10618644218',
-    ConfigFolder = 'Visual Command Library Configs',
+    ConfigFolder = 'Visual Command UI Library Configs',
     Theme = Library.Themes.Dark,
     Position = 'Center',
     BlurWhenVisible = true,
