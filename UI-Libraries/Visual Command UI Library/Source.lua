@@ -4,6 +4,7 @@ local TweenService = game:GetService('TweenService')
 local UserInputService = game:GetService('UserInputService')
 local TextService = game:GetService('TextService')
 local Players = game:GetService('Players')
+local Worksapce = game:GetService('Workspace')
 
 -- // Variables
 local Library = {}
@@ -16,7 +17,7 @@ local ConfigUpdates = {}
 do
     function Utility:Log(Type, Message)
         Type = Type:lower()
-        
+
         if Type == 'error' then
             error('[ Visual ] Error: ' .. Message)
         elseif Type == 'log' then
@@ -37,13 +38,6 @@ do
     function Utility:Tween(Instance, Properties, Duration, ...)
         local TweenInfo = TweenInfo.new(Duration, ...)
         TweenService:Create(Instance, TweenInfo, Properties):Play()
-    end
-
-    function Utility:Increment(Number, Delay, Callback)
-        for Index = 1, Number do
-            Callback(Index)
-            task.wait(Delay)
-        end
     end
 
     function Utility:Create(InstanceName, Properties, Children)
@@ -111,6 +105,16 @@ do
                 Update(Input)
             end
         end)
+    end
+
+    function Utility:StringToKeyCode(String)
+        local Byte = string.byte(String)
+
+        for _, KeyCode in next, Enum.KeyCode:GetEnumItems() do
+            if KeyCode.Value == Byte then
+                return KeyCode
+            end
+        end
     end
 
     function Utility:GetProperty(Level, Name, Properties)
@@ -197,6 +201,7 @@ Library.Themes = {
     }
 }
 Library.Toggled = false
+Library.Prefix = Utility:StringToKeyCode(';')
 
 -- // CreateWindow - Name, IntroText, IntroIcon, ConfigFolder, Theme, Position, Draggable, Prefix
 function Library:CreateWindow(Properties)
@@ -207,7 +212,9 @@ function Library:CreateWindow(Properties)
     local Theme = Utility:GetProperty('Window', 'Theme', Properties) or Library.Themes.Dark
     local Position = string.lower(Utility:GetProperty('Window', 'Position', Properties)) or 'top'
     local Draggable = Utility:GetProperty('Window', 'Draggable', Properties) or false
-    local Prefix = Utility:GetProperty('Window', 'Prefix', Properties) or 'Period'
+    local Prefix = Utility:StringToKeyCode(Utility:GetProperty('Window', 'Prefix', Properties)) or Utility:StringToKeyCode(';')
+
+    Library.Prefix = Prefix
 
     -- // Destroy Old UI
     Utility:Destroy()
@@ -848,8 +855,11 @@ function Library:CreateWindow(Properties)
     -- // Prefix
     UserInputService.InputBegan:Connect(function(Input, GameProcessedEvent)
         if not GameProcessedEvent then
-            if Input.KeyCode.Name == Prefix then
+            print(Library.Prefix)
+            if Input.KeyCode.Name == Library.Prefix.Name then
+                print('1')
                 if Main.Position.Y == UDim.new(1, 36) or Main.Position.Y == UDim.new(0, -71) then
+                    print('2')
                     if string.find(Position, 'bottom') then
                         Utility:Tween(Main, {Position = Main.Position + UDim2.new(0, 0, 0, -36)}, 0.25)
                         
@@ -996,10 +1006,15 @@ function Library:CreateWindow(Properties)
         end
     end)
 
-    -- // Add Command
-    local CommandFunctions = {}
+    local WindowFunctions = {}
 
-    function CommandFunctions:AddCommand(Name, Arguments, Description, Callback)
+    -- // Change Prefix
+    function WindowFunctions:ChangePrefix(Prefix)
+        Library.Prefix = Utility:StringToKeyCode(Prefix)
+    end
+
+    -- // Add Command
+    function WindowFunctions:AddCommand(Name, Arguments, Description, Callback)
         Commands[Name] = {
             Name = Name,
             Arguments = Arguments,
@@ -1011,7 +1026,6 @@ function Library:CreateWindow(Properties)
             return string.format('<font color = "rgb(%d, %d, %d)">%s</font>', Color.r * 255, Color.g * 255, Color.b * 255, String)
         end
 
-        --local TextSize = TextService:GetTextSize(Paragraph, 14, Enum.Font.Gotham, Vector2.new(410, math.huge))
         local function ConstructString()
             local String = '' .. Highlight(Name, Theme.PrimaryTextColor) .. ' '
 
@@ -1152,9 +1166,8 @@ function Library:CreateWindow(Properties)
         end)
     end
 
-    return CommandFunctions
+    return WindowFunctions
 end
-
 
 -- // Example
 local Window = Library:CreateWindow({
@@ -1165,9 +1178,26 @@ local Window = Library:CreateWindow({
     Theme = Library.Themes.Dark,
     Position = 'Top',
     Draggable = true,
-    Prefix = 'Semicolon'
+    Prefix = ';'
 })
 
-local Command = Window:AddCommand('print', {'string'}, 'print a string', function(Arguments, Speaker)
+Window:AddCommand('print', {'string'}, 'print a string', function(Arguments, Speaker)
     print(Arguments[1])
 end)
+
+Window:AddCommand('prefix', {'new prefix'}, 'change the prefix', function(Arguments, Speaker)
+    Window:ChangePrefix(Arguments[1])
+end)
+
+--[[
+    shit to do
+        convert symbols to keycodes
+        default commands
+            config
+            theme
+            prefix
+        notifications
+        dragging
+        configs
+        change theme
+]]
