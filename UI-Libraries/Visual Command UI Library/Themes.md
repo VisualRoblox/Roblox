@@ -9,7 +9,7 @@ Custom themes should have these names.
     AccentColor = Color3.fromRGB(100, 100, 100),
     PrimaryTextColor = Color3.fromRGB(255, 255, 255),
     SecondaryTextColor = Color3.fromRGB(175, 175, 175)
-},
+}
 ```
 
 ## Dark Theme
