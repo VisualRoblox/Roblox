@@ -669,6 +669,13 @@ function Library:CreateWindow(Properties)
             Position = UDim2.new(0, 0, 0, -305),
             Size = UDim2.new(0, 500, 0, 300)
         }, {
+            Utility:Create('UIStroke', {
+                Name = 'CommandsHolderStroke',
+                ApplyStrokeMode = 'Contextual',
+                Color = Theme.AccentColor,
+                LineJoinMode = 'Round',
+                Thickness = 1
+            }),
             Utility:Create('UICorner', {
                 CornerRadius = UDim.new(0, 5),
                 Name = 'CommandsHolderCorner'
