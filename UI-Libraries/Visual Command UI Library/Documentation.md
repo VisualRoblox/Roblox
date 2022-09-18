@@ -1,4 +1,5 @@
 # Visual Command UI Library Documentation
+Gitbook Version: https://mapple7777.gitbook.io/visual-command-ui-library-documentation/visual-command-ui-library-documentation
 
 ## Getting Loadstring
 ```lua

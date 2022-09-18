@@ -1,4 +1,6 @@
 -- // Visual Command UI Library Example
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/VisualRoblox/Roblox/main/UI-Libraries/Visual%20Command%20UI%20Library/Source.lua', true))()
+
 local Window = Library:CreateWindow({
     Name = 'Visual Command UI Library',
     IntroText = 'Visual Command UI Library',
