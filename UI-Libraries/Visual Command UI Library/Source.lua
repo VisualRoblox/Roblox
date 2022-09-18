@@ -254,6 +254,76 @@ Library.Themes = {
         AccentColor = Color3.fromRGB(125, 125, 125),
         PrimaryTextColor = Color3.fromRGB(0, 0, 0),
         SecondaryTextColor = Color3.fromRGB(75, 75, 75)
+    },
+    ['discord'] = {
+        BackgroundColor = Color3.fromRGB(54, 57, 63),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(110, 110, 115),
+        AccentColor = Color3.fromRGB(75, 75, 75),
+        SecondaryColor = Color3.fromRGB(59, 65, 72)
+    },
+    ['redandblack'] = {
+        BackgroundColor = Color3.fromRGB(0, 0, 0),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(135, 135, 135),
+        AccentColor = Color3.fromRGB(255, 0, 0),
+        SecondaryColor = Color3.fromRGB(50, 50, 50)
+    },
+    ['nordicdark'] = {
+        BackgroundColor = Color3.fromRGB(25, 30, 35),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(135, 135, 135),
+        AccentColor = Color3.fromRGB(50, 60, 70),
+        SecondaryColor = Color3.fromRGB(50, 55, 60)
+    },
+    ['nordiclight'] = {
+        BackgroundColor = Color3.fromRGB(67, 75, 94),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(135, 135, 135),
+        AccentColor = Color3.fromRGB(92, 97, 116),
+        SecondaryColor = Color3.fromRGB(82, 87, 106)
+    },
+    ['purple'] = {
+        BackgroundColor = Color3.fromRGB(30, 30, 45),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(135, 135, 135),
+        AccentColor = Color3.fromRGB(60, 60, 80),
+        SecondaryColor = Color3.fromRGB(60, 60, 80)
+    },
+    ['sentinel'] = {
+        BackgroundColor = Color3.fromRGB(30, 30, 30),
+        PrimaryTextColor = Color3.fromRGB(130, 190, 130),
+        SecondaryTextColor = Color3.fromRGB(230, 35, 70),
+        AccentColor = Color3.fromRGB(50, 50, 50),
+        SecondaryColor = Color3.fromRGB(35, 35, 35)
+    },
+    ['synapsex'] = {
+        BackgroundColor = Color3.fromRGB(50, 50, 50),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(125, 125, 125),
+        AccentColor = Color3.fromRGB(70, 70, 70),
+        SecondaryColor = Color3.fromRGB(65, 65, 65)
+    },
+    ['krnl'] = {
+        BackgroundColor = Color3.fromRGB(40, 40, 40),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(125, 125, 125),
+        AccentColor = Color3.fromRGB(60, 60, 60),
+        SecondaryColor = Color3.fromRGB(40, 40, 40)
+    },
+    ['scriptware'] = {
+        BackgroundColor = Color3.fromRGB(30, 30, 30),
+        PrimaryTextColor = Color3.fromRGB(0, 125, 255),
+        SecondaryTextColor = Color3.fromRGB(255, 255, 255),
+        AccentColor = Color3.fromRGB(0, 125, 255),
+        SecondaryColor = Color3.fromRGB(45, 45, 45)
+    },
+    ['kiriot'] = {
+        BackgroundColor = Color3.fromRGB(35, 35, 35),
+        PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+        SecondaryTextColor = Color3.fromRGB(135, 135, 135),
+        AccentColor = Color3.fromRGB(255, 170, 60),
+        SecondaryColor = Color3.fromRGB(50, 50, 50)
     }
 }
 Library.Prefix = Utility:StringToKeyCode(';')
@@ -719,6 +789,13 @@ function Library:CreateWindow(Properties)
             Position = UDim2.new(0, 0, 0, 70),
             Size = UDim2.new(0, 500, 0, 300)
         }, {
+            Utility:Create('UIStroke', {
+                Name = 'CommandsHolderStroke',
+                ApplyStrokeMode = 'Contextual',
+                Color = Theme.AccentColor,
+                LineJoinMode = 'Round',
+                Thickness = 1
+            }),
             Utility:Create('UICorner', {
                 CornerRadius = UDim.new(0, 5),
                 Name = 'CommandsHolderCorner'
@@ -811,6 +888,7 @@ function Library:CreateWindow(Properties)
                     Utility:Tween(Main.CommandsHolder, {BackgroundColor3 = Library.Theme.BackgroundColor}, 0.25)
                     Utility:Tween(Main.CommandsHolder.CommandsHolderScrolling, {BackgroundColor3 = Library.Theme.BackgroundColor}, 0.25)
                     Utility:Tween(Main.CommandsHolder.CommandsHolderScrolling, {ScrollBarImageColor3 = Library.Theme.AccentColor}, 0.25)
+                    Utility:Tween(Main.CommandsHolder.CommandsHolderStroke, {Color = Theme.AccentColor}, 0.25)
                     Utility:Tween(Container.ToolTip, {BackgroundColor3 = Library.Theme.BackgroundColor}, 0.25)
                     Utility:Tween(Container.ToolTip, {TextColor3 = Library.Theme.PrimaryTextColor}, 0.25)
                     Utility:Tween(Container.ToolTip.ToolTipStroke, {Color = Theme.AccentColor}, 0.25)
