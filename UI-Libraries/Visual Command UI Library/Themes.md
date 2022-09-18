@@ -1,5 +1,17 @@
 # Visual Command UI Library Themes
 
+## Theme Table
+Custom themes should have these names.
+```lua
+{
+    BackgroundColor = Color3.fromRGB(40, 40, 40),
+    SecondaryColor = Color3.fromRGB(50, 50, 50),
+    AccentColor = Color3.fromRGB(100, 100, 100),
+    PrimaryTextColor = Color3.fromRGB(255, 255, 255),
+    SecondaryTextColor = Color3.fromRGB(175, 175, 175)
+},
+```
+
 ## Dark Theme
 Name: dark
 
