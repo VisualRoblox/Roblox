@@ -1247,12 +1247,6 @@ function Library:CreateWindow(Properties)
         if not GameProcessedEvent then
             if Input.KeyCode.Name == Library.Prefix.Name then
                 if not HoverDebounce then
-                    task.spawn(function()
-                        HoverDebounce = true
-                        task.wait(0.5)
-                        HoverDebounce = false 
-                    end)
-
                     if Main.Position.Y == UDim.new(1, 37) or Main.Position.Y == UDim.new(1, 36) or Main.Position.Y == UDim.new(0, -72) then
                         UpdateFrameSizes()
                         if string.find(Position, 'bottom') then
