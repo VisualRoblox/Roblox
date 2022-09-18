@@ -2,6 +2,7 @@
 
 ## Dark Theme
 Name: dark
+
 !['Dark Theme Image'](Images/dark.png 'Dark Theme')
 
 ## Light Theme
