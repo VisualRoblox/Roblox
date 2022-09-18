@@ -9,7 +9,7 @@ local Window = Library:CreateWindow({
     IntroBlurIntensity = 15,
     Theme = Library.Themes.dark,
     Position = 'bottom',
-    Draggable = false,
+    Draggable = true,
     Prefix = ';'
 })
 
