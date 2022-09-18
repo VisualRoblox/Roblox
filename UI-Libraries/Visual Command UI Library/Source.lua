@@ -82,20 +82,18 @@ do
         local Main = CoreGui:FindFirstChild('Visual Command UI Library | .gg/puxxCphTnK').Main
         
         local function Update(Input)
-            if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
-                local Delta = Input.Position - DragStart
-                local Camera = Workspace.CurrentCamera
+            local Delta = Input.Position - DragStart
+            local Camera = Workspace.CurrentCamera
 
-                if StartPosition.X.Offset + Delta.X <= -500 and -Camera.ViewportSize.X <= StartPosition.X.Offset + Delta.X then
-                    local Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
-                    Utility:Tween(Parent, {Position = Position}, 0.25)
-                elseif StartPosition.X.Offset + Delta.X > -250 then
-                    local Position = UDim2.new(1, -250, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
-                    Utility:Tween(Parent, {Position = Position}, 0.25)
-                elseif -Camera.ViewportSize.X > StartPosition.X.Offset + Delta.X then
-                    local Position = UDim2.new(1, -Camera.ViewportSize.X, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
-                    Utility:Tween(Parent, {Position = Position}, 0.25)
-                end
+            if StartPosition.X.Offset + Delta.X <= -500 and -Camera.ViewportSize.X <= StartPosition.X.Offset + Delta.X then
+                local Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
+                Utility:Tween(Parent, {Position = Position}, 0.25)
+            elseif StartPosition.X.Offset + Delta.X > -250 then
+                local Position = UDim2.new(1, -250, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
+                Utility:Tween(Parent, {Position = Position}, 0.25)
+            elseif -Camera.ViewportSize.X > StartPosition.X.Offset + Delta.X then
+                local Position = UDim2.new(1, -Camera.ViewportSize.X, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
+                Utility:Tween(Parent, {Position = Position}, 0.25)
             end
         end
         
