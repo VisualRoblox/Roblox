@@ -78,17 +78,19 @@ do
     end
 
     function Utility:EnableDragging(Frame, Parent)
-        local DraggingInput, DragStart, StartPosition
+        local DraggingInput, StartPosition
+        local DragStart = Vector3.new(0,0,0)
+        
         local Main = CoreGui:FindFirstChild('Visual Command UI Library | .gg/puxxCphTnK').Main
         
         local function Update(Input)
             local Delta = Input.Position - DragStart
             local Camera = Workspace.CurrentCamera
 
-            if StartPosition.X.Offset + Delta.X <= -500 and -Camera.ViewportSize.X <= StartPosition.X.Offset + Delta.X then
+            if StartPosition.X.Offset + Delta.X <= -750 and -Camera.ViewportSize.X <= StartPosition.X.Offset + Delta.X then
                 local Position = UDim2.new(StartPosition.X.Scale, StartPosition.X.Offset + Delta.X, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
                 Utility:Tween(Parent, {Position = Position}, 0.25)
-            elseif StartPosition.X.Offset + Delta.X > -250 then
+            elseif StartPosition.X.Offset + Delta.X > -500 then
                 local Position = UDim2.new(1, -250, Parent.Position.Y.Scale, Parent.Position.Y.Offset)
                 Utility:Tween(Parent, {Position = Position}, 0.25)
             elseif -Camera.ViewportSize.X > StartPosition.X.Offset + Delta.X then
