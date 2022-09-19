@@ -1007,6 +1007,7 @@ function Library:CreateWindow(Properties)
             if Input.KeyCode.Name == Library.Prefix.Name then
                 if Main.Position.Y == UDim.new(1, 37) or Main.Position.Y == UDim.new(1, 36) or Main.Position.Y == UDim.new(0, -72) then
                     UpdateFrameSizes()
+                    CommandInput:CaptureFocus()
                     if string.find(Position, 'bottom') then
                         Utility:Tween(Main, {Position = Main.Position + UDim2.new(0, 0, 0, -36)}, 0.25)
                         
@@ -1053,10 +1054,6 @@ function Library:CreateWindow(Properties)
                         end
                     end
                 end
-
-                task.wait(0.25)
-
-                CommandInput:CaptureFocus()
             end
         end
     end)
@@ -1235,9 +1232,22 @@ function Library:CreateWindow(Properties)
                 end
             end
         else
+            local Split = CommandInput.Text:split()
+            local Full = ''
+            
+            for Index, String in next, Split do
+                if Index == 1 then
+                    Full = Full .. Split[1]:gsub(Utility:KeyCodeToString(Library.Prefix), '')
+                else
+                    Full = Full .. Split[Index]
+                end
+            end
+
+            CommandInput.Text = Full
+
             for _, Instance in next, CommandsHolderScrolling:GetChildren() do
                 if not Instance:IsA('UIListLayout') then
-                    if string.find(Instance[Instance.Name:gsub('CommandHolder', '') .. 'Text'].Text:lower(), CommandInput.Text) then
+                    if string.find(Instance.Name:gsub('CommandHolder', ''):lower(), CommandInput.Text:lower()) then
                         Instance.Visible = true
 
                         UpdateFrameSizes()
