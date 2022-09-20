@@ -1089,10 +1089,7 @@ function Library:CreateWindow(Properties)
 
             if not HoverDebounce then
                 if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
-                    task.spawn(function()
-                        Execute(CommandInput.Text)
-                        CommandInput.Text = ''
-                    end)
+                    CommandInput.Text = ''
 
                     task.spawn(function()
                         HoverDebounce = true
@@ -1155,10 +1152,7 @@ function Library:CreateWindow(Properties)
             task.spawn(Command.Callback, Arguments, Players.LocalPlayer)
 
             if Main.Position.Y == UDim.new(1, 0) or Main.Position.Y == UDim.new(0, -36) then
-                task.spawn(function()
-                    Execute(CommandInput.Text)
-                    CommandInput.Text = ''
-                end)
+                CommandInput.Text = ''
 
                 if not HoverDebounce then
                     task.spawn(function()
