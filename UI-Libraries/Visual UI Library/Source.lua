@@ -1157,7 +1157,8 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
             BackgroundColor3 = Theme.BackgroundColor,
             BorderSizePixel = 0,
             BackgroundTransparency = 1,
-            Position = UDim2.new(0, 595, 0, 150),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            AnchorPoint = UDim.new(0.5, 0.5),
             Size = UDim2.new(0, 0, 0, 0)
         }, {
             Utility:Create('UICorner', {
@@ -2418,7 +2419,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
                         Text = Placeholder,
                         TextColor3 = Theme.SecondaryTextColor,
                         TextSize = 14,
-                        ClearTextOnFocus = false
+                        ClearTextOnFocus = true
                     }, {
                         Utility:Create('UIStroke', {
                             Name = Name..'TextboxStroke',
