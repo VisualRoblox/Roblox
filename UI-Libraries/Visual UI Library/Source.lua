@@ -1157,8 +1157,7 @@ function Library:CreateWindow(HubName, GameName, IntroText, IntroIcon, ImprovePe
             BackgroundColor3 = Theme.BackgroundColor,
             BorderSizePixel = 0,
             BackgroundTransparency = 1,
-            Position = UDim2.new(0.5, 0, 0.5, 0),
-            AnchorPoint = UDim.new(0.5, 0.5),
+            Position = UDim2.new(0, 595, 0, 150),
             Size = UDim2.new(0, 0, 0, 0)
         }, {
             Utility:Create('UICorner', {
